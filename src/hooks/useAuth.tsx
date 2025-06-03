@@ -39,14 +39,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         setLoading(false);
 
-        // Handle automatic login after email confirmation
+        // Handle different auth events
         if (event === 'SIGNED_IN' && session?.user) {
           // Check if this is coming from email confirmation
           const urlParams = new URLSearchParams(window.location.hash.substring(1));
           const accessToken = urlParams.get('access_token');
           const type = urlParams.get('type');
           
+          console.log('URL params:', { accessToken: !!accessToken, type });
+          
           if (accessToken && type === 'signup') {
+            console.log('Email confirmation detected, redirecting to dashboard');
             toast({
               title: "Email confirmed!",
               description: "Welcome! Your account has been verified and you're now signed in.",
@@ -54,11 +57,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             
             // Clear the URL hash and redirect to dashboard
             window.history.replaceState(null, '', window.location.pathname);
-            window.location.href = '/dashboard';
+            setTimeout(() => {
+              window.location.href = '/dashboard';
+            }, 1000);
           } else if (accessToken && type === 'recovery') {
             // For password reset, redirect to reset-password page
             window.location.href = '/reset-password' + window.location.hash;
-          } else if (event === 'SIGNED_IN') {
+          } else {
             // Normal sign in
             toast({
               title: "Welcome back!",
