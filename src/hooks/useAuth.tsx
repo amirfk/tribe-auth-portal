@@ -35,6 +35,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     console.log('Initial URL check:', { accessToken: !!accessToken, type, error: errorParam });
 
+    // Handle email confirmation immediately if detected
+    if (accessToken && type === 'signup') {
+      console.log('Email confirmation detected on page load');
+      toast({
+        title: "Email confirmed!",
+        description: "Welcome! Your account has been verified and you're now signed in.",
+      });
+      
+      // Clear the URL hash and redirect to dashboard
+      window.history.replaceState(null, '', window.location.pathname);
+      setTimeout(() => {
+        console.log('Redirecting to dashboard after email confirmation');
+        window.location.href = '/dashboard';
+      }, 1500);
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       console.log('Initial session check:', { session: !!session, error });
@@ -63,25 +79,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           console.log('SIGNED_IN event - URL params:', { accessToken: !!accessToken, type });
           console.log('Full URL hash:', window.location.hash);
           
-          if (accessToken && type === 'signup') {
-            console.log('Email confirmation detected, redirecting to dashboard');
-            toast({
-              title: "Email confirmed!",
-              description: "Welcome! Your account has been verified and you're now signed in.",
-            });
-            
-            // Clear the URL hash and redirect to dashboard
-            window.history.replaceState(null, '', window.location.pathname);
-            setTimeout(() => {
-              console.log('Redirecting to dashboard');
-              window.location.href = '/dashboard';
-            }, 1000);
-          } else if (accessToken && type === 'recovery') {
+          if (accessToken && type === 'recovery') {
             // For password reset, redirect to reset-password page
             console.log('Password recovery detected');
             window.location.href = '/reset-password' + window.location.hash;
-          } else {
-            // Normal sign in
+          } else if (!accessToken || type !== 'signup') {
+            // Only show welcome message for normal sign in (not email confirmation)
             console.log('Normal sign in detected');
             toast({
               title: "Welcome back!",
