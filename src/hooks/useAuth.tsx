@@ -23,8 +23,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('AuthProvider useEffect starting');
+    console.log('Current URL:', window.location.href);
+    console.log('Current hash:', window.location.hash);
+    
+    // Check URL hash immediately on load for email confirmation
+    const urlParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = urlParams.get('access_token');
+    const type = urlParams.get('type');
+    const errorParam = urlParams.get('error');
+    
+    console.log('Initial URL check:', { accessToken: !!accessToken, type, error: errorParam });
+
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      console.log('Initial session check:', { session: !!session, error });
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -33,7 +46,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth event:', event, 'Session:', session);
+        console.log('Auth event:', event, 'Session:', !!session);
+        console.log('Full auth event details:', { event, session, user: session?.user });
         
         setSession(session);
         setUser(session?.user ?? null);
@@ -46,7 +60,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const accessToken = urlParams.get('access_token');
           const type = urlParams.get('type');
           
-          console.log('URL params:', { accessToken: !!accessToken, type });
+          console.log('SIGNED_IN event - URL params:', { accessToken: !!accessToken, type });
+          console.log('Full URL hash:', window.location.hash);
           
           if (accessToken && type === 'signup') {
             console.log('Email confirmation detected, redirecting to dashboard');
@@ -58,13 +73,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             // Clear the URL hash and redirect to dashboard
             window.history.replaceState(null, '', window.location.pathname);
             setTimeout(() => {
+              console.log('Redirecting to dashboard');
               window.location.href = '/dashboard';
             }, 1000);
           } else if (accessToken && type === 'recovery') {
             // For password reset, redirect to reset-password page
+            console.log('Password recovery detected');
             window.location.href = '/reset-password' + window.location.hash;
           } else {
             // Normal sign in
+            console.log('Normal sign in detected');
             toast({
               title: "Welcome back!",
               description: "You have successfully signed in.",
@@ -73,10 +91,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
 
         if (event === 'SIGNED_OUT') {
+          console.log('User signed out');
           toast({
             title: "Signed out",
             description: "You have been successfully signed out.",
           });
+        }
+        
+        if (event === 'TOKEN_REFRESHED') {
+          console.log('Token refreshed');
         }
       }
     );
