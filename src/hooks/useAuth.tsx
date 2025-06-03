@@ -33,9 +33,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth event:', event, 'Session:', session);
+        
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        // Handle automatic login after email confirmation
+        if (event === 'SIGNED_IN' && session?.user) {
+          // Check if this is coming from email confirmation
+          const urlParams = new URLSearchParams(window.location.hash.substring(1));
+          const accessToken = urlParams.get('access_token');
+          const type = urlParams.get('type');
+          
+          if (accessToken && type === 'signup') {
+            toast({
+              title: "Email confirmed!",
+              description: "Welcome! Your account has been verified and you're now signed in.",
+            });
+            
+            // Clear the URL hash and redirect to dashboard
+            window.history.replaceState(null, '', window.location.pathname);
+            window.location.href = '/dashboard';
+          } else if (accessToken && type === 'recovery') {
+            // For password reset, redirect to reset-password page
+            window.location.href = '/reset-password' + window.location.hash;
+          } else if (event === 'SIGNED_IN') {
+            // Normal sign in
+            toast({
+              title: "Welcome back!",
+              description: "You have successfully signed in.",
+            });
+          }
+        }
+
+        if (event === 'SIGNED_OUT') {
+          toast({
+            title: "Signed out",
+            description: "You have been successfully signed out.",
+          });
+        }
       }
     );
 
@@ -50,6 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         data: {
           full_name: fullName,
         },
+        emailRedirectTo: `${window.location.origin}/`,
       },
     });
 
@@ -82,11 +120,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
       throw error;
     }
-
-    toast({
-      title: "Welcome back!",
-      description: "You have successfully signed in.",
-    });
   };
 
   const signOut = async () => {
@@ -100,11 +133,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
       throw error;
     }
-
-    toast({
-      title: "Signed out",
-      description: "You have been successfully signed out.",
-    });
   };
 
   const resetPassword = async (email: string) => {
