@@ -33,7 +33,7 @@ const AiCoach = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chatEnded, setChatEnded] = useState(false);
   const [result, setResult] = useState<ChatResult | null>(null);
-  const [webhookUrl, setWebhookUrl] = useState('');
+  const [webhookUrl] = useState('https://your-n8n-webhook-url.com'); // Set your webhook URL here
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -165,19 +165,6 @@ const AiCoach = () => {
           <p className="text-muted-foreground">بیایید باهم مشخص کنیم کدام نوع مشاوره برای شما مناسب است</p>
         </div>
 
-        {!webhookUrl && (
-          <Card className="p-4 mb-6">
-            <label className="block text-sm font-medium mb-2">آدرس Webhook n8n:</label>
-            <Input
-              type="url"
-              placeholder="https://your-n8n-webhook-url.com"
-              value={webhookUrl}
-              onChange={(e) => setWebhookUrl(e.target.value)}
-              className="mb-2"
-            />
-            <p className="text-xs text-muted-foreground">این آدرس برای ارتباط با مشاور هوشمند ضروری است</p>
-          </Card>
-        )}
 
         <Card className="h-[600px] flex flex-col">
           <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
