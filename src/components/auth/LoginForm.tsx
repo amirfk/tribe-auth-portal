@@ -22,7 +22,7 @@ export const LoginForm = () => {
 
     try {
       await signIn(email, password);
-      navigate('/dashboard');
+      navigate('/ai-coach');
     } catch (error) {
       // Error handled in useAuth hook
     } finally {

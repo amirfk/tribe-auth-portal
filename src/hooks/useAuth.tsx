@@ -44,11 +44,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         description: "Welcome! Your account has been verified and you're now signed in.",
       });
       
-      // Clear the URL hash and redirect to dashboard
+      // Clear the URL hash and redirect to AI coach
       window.history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
-        console.log('Redirecting to dashboard after email confirmation');
-        window.location.href = '/dashboard';
+        console.log('Redirecting to AI coach after email confirmation');
+        window.location.href = '/ai-coach';
       }, 1500);
     }
 
@@ -158,7 +158,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/dashboard`,
+        redirectTo: `${window.location.origin}/ai-coach`,
       },
     });
 
