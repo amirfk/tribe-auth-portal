@@ -33,7 +33,7 @@ const AiCoach = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chatEnded, setChatEnded] = useState(false);
   const [result, setResult] = useState<ChatResult | null>(null);
-  const [webhookUrl] = useState('https://n8n-jbohdzzc.eu-central-1.clawcloudrun.com/webhook/e17c29e6-2e64-45bb-a9c4-6ebe5b65b9c0');
+  const [webhookUrl] = useState('https://wekohmrtrrebcdprvzza.functions.supabase.co/ai-coach-proxy');
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
