@@ -89,32 +89,49 @@ const AiCoach = () => {
 
       const data = await response.json();
 
-      // Check if this is the final result
-      if (data.status === 'done' && data.result) {
-        setResult(data);
+      // Handle different response formats from n8n
+      let aiResponseText = '';
+      
+      if (Array.isArray(data) && data.length > 0 && data[0].output) {
+        // New n8n format: [{ output: "text" }]
+        aiResponseText = data[0].output;
+      } else if (data.response || data.message) {
+        // Old format: { response: "text" } or { message: "text" }
+        aiResponseText = data.response || data.message;
+      } else {
+        aiResponseText = 'متأسفم، نتوانستم پاسخ مناسبی دریافت کنم.';
+      }
+
+      // Check if the response contains a JSON result at the end
+      const jsonPattern = /```json\s*\{\s*"status":\s*"done",\s*"result":\s*"([^"]+)"\s*\}\s*```/;
+      const jsonMatch = aiResponseText.match(jsonPattern);
+      
+      if (jsonMatch) {
+        // Extract the result and clean the message
+        const result = jsonMatch[1];
+        const cleanMessage = aiResponseText.replace(jsonPattern, '').trim();
+        
+        setResult({ status: 'done', result: result as 'تراپی' | 'کوچینگ' | 'منتورینگ' });
         setChatEnded(true);
         
-        const finalMessage: Message = {
+        const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
-          text: getResultMessage(data.result),
+          text: cleanMessage,
+          sender: 'ai',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, aiMessage]);
+        
+        // Add final result message
+        const finalMessage: Message = {
+          id: (Date.now() + 2).toString(),
+          text: getResultMessage(result as 'تراپی' | 'کوچینگ' | 'منتورینگ'),
           sender: 'ai',
           timestamp: new Date()
         };
         setMessages(prev => [...prev, finalMessage]);
       } else {
-        // Handle different response formats from n8n
-        let aiResponseText = '';
-        
-        if (Array.isArray(data) && data.length > 0 && data[0].output) {
-          // New n8n format: [{ output: "text" }]
-          aiResponseText = data[0].output;
-        } else if (data.response || data.message) {
-          // Old format: { response: "text" } or { message: "text" }
-          aiResponseText = data.response || data.message;
-        } else {
-          aiResponseText = 'متأسفم، نتوانستم پاسخ مناسبی دریافت کنم.';
-        }
-        
+        // Regular message without final result
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
           text: aiResponseText,
@@ -157,8 +174,7 @@ const AiCoach = () => {
   };
 
   const handleTelegramRedirect = () => {
-    // Replace with actual Telegram chat URL
-    const telegramUrl = 'https://t.me/your_coaching_bot'; // Update this with actual Telegram URL
+    const telegramUrl = 'https://t.me/Minastribe_coaching';
     window.open(telegramUrl, '_blank');
   };
 
