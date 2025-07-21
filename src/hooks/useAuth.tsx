@@ -84,8 +84,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             // For password reset, redirect to reset-password page
             console.log('Password recovery detected');
             window.location.href = '/reset-password' + window.location.hash;
-          } else if (!accessToken || type !== 'signup') {
-            // Only show welcome message for normal sign in (not email confirmation)
+          } else if (accessToken && type !== 'signup') {
+            // Only show welcome message for actual sign in actions (not tab switching or token refresh)
             console.log('Normal sign in detected');
             toast({
               title: "Welcome back!",
