@@ -101,11 +101,23 @@ const AiCoach = () => {
           timestamp: new Date()
         };
         setMessages(prev => [...prev, finalMessage]);
-      } else if (data.response || data.message) {
-        // Regular AI response
+      } else {
+        // Handle different response formats from n8n
+        let aiResponseText = '';
+        
+        if (Array.isArray(data) && data.length > 0 && data[0].output) {
+          // New n8n format: [{ output: "text" }]
+          aiResponseText = data[0].output;
+        } else if (data.response || data.message) {
+          // Old format: { response: "text" } or { message: "text" }
+          aiResponseText = data.response || data.message;
+        } else {
+          aiResponseText = 'متأسفم، نتوانستم پاسخ مناسبی دریافت کنم.';
+        }
+        
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
-          text: data.response || data.message || 'متأسفم، نتوانستم پاسخ مناسبی دریافت کنم.',
+          text: aiResponseText,
           sender: 'ai',
           timestamp: new Date()
         };
