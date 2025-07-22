@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Link } from 'react-router-dom';
+import { MessageCircle, Settings, LogOut, Sparkles } from 'lucide-react';
 
 interface Profile {
   id: string;
@@ -77,79 +79,145 @@ export const UserProfile = () => {
 
   if (fetchingProfile) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-teal-600"></div>
+      <div className="min-h-screen relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/30 to-office-accent/20"></div>
+        <div className="relative z-10 min-h-screen flex items-center justify-center">
+          <div className="w-12 h-12 border-4 border-primary border-l-transparent rounded-full animate-spin"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-teal-100 px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-teal-800 mb-2">Profile Settings</h1>
-          <p className="text-gray-600">Manage your account information</p>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <div className="flex items-center space-x-4">
-              <Avatar className="h-20 w-20">
-                <AvatarImage src={avatarUrl} alt={fullName} />
-                <AvatarFallback className="bg-teal-100 text-teal-800 text-xl">
-                  {fullName ? getInitials(fullName) : 'MT'}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <CardTitle className="text-xl">{fullName || 'Mina\'s Tribe Member'}</CardTitle>
-                <CardDescription>{user?.email}</CardDescription>
-              </div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Professional background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/30 to-office-accent/20"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,theme(colors.primary/5),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,theme(colors.accent/10),transparent_60%)]"></div>
+      
+      <div className="relative z-10 min-h-screen px-4 py-8">
+        {/* Header */}
+        <header className="max-w-4xl mx-auto mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img 
+                src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
+                alt="Mina's Tribe Logo" 
+                className="h-10 w-auto object-contain"
+              />
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                داشبورد شخصی
+              </h1>
             </div>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleUpdateProfile} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
-                <Input
-                  id="fullName"
-                  type="text"
-                  placeholder="Enter your full name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="focus:ring-teal-500 focus:border-teal-500"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="avatarUrl">Avatar URL</Label>
-                <Input
-                  id="avatarUrl"
-                  type="url"
-                  placeholder="Enter avatar image URL"
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="focus:ring-teal-500 focus:border-teal-500"
-                />
-              </div>
-              <div className="flex space-x-4">
+            <Link to="/ai-coach">
+              <Button className="gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+                <MessageCircle className="h-4 w-4" />
+                مشاور هوشمند
+              </Button>
+            </Link>
+          </div>
+        </header>
+
+        <div className="max-w-4xl mx-auto grid lg:grid-cols-3 gap-8">
+          {/* Profile Summary Card */}
+          <div className="lg:col-span-1">
+            <Card className="bg-card/95 backdrop-blur-sm border-primary/10 shadow-xl">
+              <CardHeader className="text-center">
+                <Avatar className="h-24 w-24 mx-auto mb-4 ring-4 ring-primary/20">
+                  <AvatarImage src={avatarUrl} alt={fullName} />
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-2xl">
+                    {fullName ? getInitials(fullName) : 'MT'}
+                  </AvatarFallback>
+                </Avatar>
+                <CardTitle className="text-xl">{fullName || 'عضو خانواده مینا'}</CardTitle>
+                <CardDescription className="text-muted-foreground">{user?.email}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Link to="/ai-coach" className="block">
+                  <Button className="w-full gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+                    <MessageCircle className="h-4 w-4" />
+                    شروع مشاوره
+                  </Button>
+                </Link>
                 <Button
-                  type="submit"
-                  className="bg-teal-600 hover:bg-teal-700"
-                  disabled={loading}
-                >
-                  {loading ? 'Updating...' : 'Update Profile'}
-                </Button>
-                <Button
-                  type="button"
                   variant="outline"
                   onClick={signOut}
-                  className="border-red-300 text-red-600 hover:bg-red-50"
+                  className="w-full gap-2 border-red-200 text-red-600 hover:bg-red-50"
                 >
-                  Sign Out
+                  <LogOut className="h-4 w-4" />
+                  خروج از حساب
                 </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Profile Settings */}
+          <div className="lg:col-span-2">
+            <Card className="bg-card/95 backdrop-blur-sm border-primary/10 shadow-xl">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-primary" />
+                  <CardTitle>تنظیمات پروفایل</CardTitle>
+                </div>
+                <CardDescription>
+                  اطلاعات حساب کاربری خود را مدیریت کنید
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleUpdateProfile} className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName">نام کامل</Label>
+                    <Input
+                      id="fullName"
+                      type="text"
+                      placeholder="نام کامل خود را وارد کنید"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className="focus:ring-primary focus:border-primary text-right"
+                      style={{ direction: 'rtl' }}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="avatarUrl">آدرس تصویر پروفایل</Label>
+                    <Input
+                      id="avatarUrl"
+                      type="url"
+                      placeholder="آدرس تصویر پروفایل خود را وارد کنید"
+                      value={avatarUrl}
+                      onChange={(e) => setAvatarUrl(e.target.value)}
+                      className="focus:ring-primary focus:border-primary"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
+                    disabled={loading}
+                  >
+                    {loading ? 'در حال بروزرسانی...' : 'بروزرسانی پروفایل'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            {/* Welcome Message */}
+            <Card className="mt-6 bg-gradient-to-r from-office-accent/20 to-accent/20 border-primary/10">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
+                    <Sparkles className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-2">به خانواده مینا خوش آمدید!</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      شما اکنون عضو جامعه‌ای هستید که متعهد به رشد شخصی و حمایت از یکدیگر است. 
+                      برای شروع سفر رشد خود، از مشاور هوشمند ما استفاده کنید.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

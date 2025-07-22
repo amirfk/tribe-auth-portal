@@ -7,7 +7,6 @@ import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { Send, Bot, User, ExternalLink, MessageCircle, Sparkles } from 'lucide-react';
-import minaLogo from '@/assets/mina-logo.png';
 
 interface Message {
   id: string;
@@ -199,7 +198,7 @@ const AiCoach = () => {
           <div className="mb-8 text-center">
             <div className="flex items-center justify-center gap-4 mb-4">
               <img 
-                src={minaLogo} 
+                src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
                 alt="Mina Coaching Logo" 
                 className="h-16 w-auto object-contain"
               />
