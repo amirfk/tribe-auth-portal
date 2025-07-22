@@ -61,7 +61,10 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				'coach-gradient': 'var(--coach-gradient)',
+				'warm-shadow': 'hsl(var(--warm-shadow))',
+				'office-accent': 'hsl(var(--office-accent))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
-import { Send, Bot, User, ExternalLink } from 'lucide-react';
+import { Send, Bot, User, ExternalLink, MessageCircle, Sparkles } from 'lucide-react';
+import minaLogo from '@/assets/mina-logo.png';
 
 interface Message {
   id: string;
@@ -186,56 +187,83 @@ const AiCoach = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-4">
-      <div className="mx-auto max-w-4xl">
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl font-bold text-primary mb-2">مشاور هوشمند</h1>
-          <p className="text-muted-foreground">بیایید باهم مشخص کنیم کدام نوع مشاوره برای شما مناسب است</p>
-        </div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Professional office background with warm lighting */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/30 to-office-accent/20"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,theme(colors.primary/5),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,theme(colors.accent/10),transparent_60%)]"></div>
+      
+      <div className="relative z-10 min-h-screen p-4">
+        <div className="mx-auto max-w-4xl">
+          {/* Professional header with logo */}
+          <div className="mb-8 text-center">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <img 
+                src={minaLogo} 
+                alt="Mina Coaching Logo" 
+                className="h-16 w-auto object-contain"
+              />
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
+              مشاور هوشمند مینا
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              بیایید باهم مشخص کنیم کدام نوع مشاوره برای شما مناسب است
+            </p>
+            <div className="flex items-center justify-center gap-2 mt-3 text-sm text-muted-foreground">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span>محیط امن و حرفه‌ای برای گفتگو</span>
+            </div>
+          </div>
 
-
-        <Card className="h-[600px] flex flex-col">
-          <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-            <div className="space-y-4">
+          {/* Professional chat interface */}
+          <Card className="h-[600px] flex flex-col shadow-xl border-2 border-primary/10 bg-card/95 backdrop-blur-sm">
+          <ScrollArea className="flex-1 p-6" ref={scrollAreaRef}>
+            <div className="space-y-6">
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex items-start gap-3 ${
+                  className={`flex items-start gap-4 ${
                     message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
                   }`}
                 >
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                  <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
                     message.sender === 'user' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-secondary text-secondary-foreground'
+                      ? 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground' 
+                      : 'bg-gradient-to-br from-accent to-accent/80 text-accent-foreground'
                   }`}>
-                    {message.sender === 'user' ? <User size={16} /> : <Bot size={16} />}
+                    {message.sender === 'user' ? (
+                      <User size={18} />
+                    ) : (
+                      <MessageCircle size={18} />
+                    )}
                   </div>
-                  <div className={`max-w-[80%] p-3 rounded-lg ${
+                  <div className={`max-w-[75%] p-4 rounded-2xl shadow-sm transition-all hover:shadow-md ${
                     message.sender === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-secondary text-secondary-foreground'
+                      ? 'bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-tr-sm'
+                      : 'bg-card border border-primary/10 text-card-foreground rounded-tl-sm'
                   }`}>
-                    <p className="text-sm leading-relaxed" style={{ direction: 'rtl' }}>
+                    <p className="text-sm leading-relaxed font-medium" style={{ direction: 'rtl' }}>
                       {message.text}
                     </p>
-                    <p className="text-xs opacity-70 mt-1">
-                      {message.timestamp.toLocaleTimeString('fa-IR')}
+                    <p className="text-xs opacity-60 mt-2 flex items-center gap-1">
+                      <span>{message.timestamp.toLocaleTimeString('fa-IR')}</span>
                     </p>
                   </div>
                 </div>
               ))}
               {isLoading && (
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center">
-                    <Bot size={16} />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent/80 text-accent-foreground flex items-center justify-center shadow-md">
+                    <MessageCircle size={18} />
                   </div>
-                  <div className="bg-secondary text-secondary-foreground p-3 rounded-lg">
+                  <div className="bg-card border border-primary/10 text-card-foreground p-4 rounded-2xl rounded-tl-sm shadow-sm">
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-current rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:0.1s]"></div>
-                      <div className="w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.1s]"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.2s]"></div>
                     </div>
+                    <p className="text-xs text-muted-foreground mt-2">در حال تایپ...</p>
                   </div>
                 </div>
               )}
@@ -243,53 +271,68 @@ const AiCoach = () => {
           </ScrollArea>
 
           {chatEnded && result?.result === 'کوچینگ' && (
-            <div className="p-4 border-t bg-secondary/50">
+            <div className="p-6 border-t border-primary/10 bg-gradient-to-r from-office-accent/20 to-accent/20">
               <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-3">
-                  برای ادامه کوچینگ با یکی از مربیان ما در تلگرام صحبت کنید
-                </p>
-                <Button onClick={handleTelegramRedirect} className="gap-2">
+                <div className="mb-4">
+                  <Sparkles className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <p className="text-muted-foreground mb-1 font-medium">
+                    🎉 بر اساس بررسی، کوچینگ برای شما مناسب است
+                  </p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    برای ادامه کوچینگ با مربی حرفه‌ای مینا در تلگرام صحبت کنید
+                  </p>
+                </div>
+                <Button 
+                  onClick={handleTelegramRedirect} 
+                  className="gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg"
+                >
                   <ExternalLink size={16} />
-                  ورود به چت تلگرام
+                  شروع کوچینگ با مینا
                 </Button>
               </div>
             </div>
           )}
 
           {!chatEnded && (
-            <div className="p-4 border-t">
-              <div className="flex gap-2">
+            <div className="p-6 border-t border-primary/10 bg-muted/30">
+              <div className="flex gap-3">
                 <Input
                   value={currentMessage}
                   onChange={(e) => setCurrentMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="پیام خود را بنویسید..."
                   disabled={isLoading || !webhookUrl}
-                  className="flex-1"
+                  className="flex-1 bg-background/80 border-primary/20 focus:border-primary/40 text-base rounded-xl"
                   style={{ direction: 'rtl' }}
                 />
                 <Button 
                   onClick={sendMessage} 
                   disabled={isLoading || !currentMessage.trim() || !webhookUrl}
                   size="icon"
+                  className="h-11 w-11 rounded-xl bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg"
                 >
-                  <Send size={16} />
+                  <Send size={18} />
                 </Button>
               </div>
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                اطلاعات شما محرمانه و امن نگهداری می‌شود
+              </p>
             </div>
           )}
         </Card>
 
-        {chatEnded && (
-          <div className="mt-6 text-center">
-            <Button 
-              variant="outline" 
-              onClick={() => navigate('/dashboard')}
-            >
-              رفتن به داشبورد
-            </Button>
-          </div>
-        )}
+          {chatEnded && (
+            <div className="mt-8 text-center">
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/dashboard')}
+                className="border-primary/30 hover:bg-primary/5"
+              >
+                بازگشت به داشبورد
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
