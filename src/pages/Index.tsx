@@ -66,7 +66,7 @@ const Index = () => {
                   شروع سفر رشد
                 </Button>
               </Link>
-              <Link to="/ai-coach">
+              <Link to="/login">
                 <Button variant="outline" className="border-primary/30 text-primary hover:bg-primary/10 text-lg px-8 py-3">
                   <MessageCircle className="mr-2 h-5 w-5" />
                   مشاور هوشمند
