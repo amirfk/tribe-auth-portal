@@ -186,13 +186,12 @@ const AiCoach = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="relative overflow-hidden">
       {/* Professional office background with warm lighting */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/30 to-office-accent/20"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,theme(colors.primary/5),transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,theme(colors.accent/10),transparent_60%)]"></div>
       
-      <div className="relative z-10 min-h-screen p-4">
+      <div className="relative z-10 p-4">
         <div className="mx-auto max-w-4xl">
           {/* Professional header with logo */}
           <div className="mb-8 text-center">
