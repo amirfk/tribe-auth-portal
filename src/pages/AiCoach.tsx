@@ -33,7 +33,7 @@ const AiCoach = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chatEnded, setChatEnded] = useState(false);
   const [result, setResult] = useState<ChatResult | null>(null);
-  const [webhookUrl] = useState('https://farhadkouhi-qiu2gbbdf.liara.run/webhook/2f3b6a3a-f901-4695-b30a-e82f784f52d1');
+  const [webhookUrl] = useState('https://farhadkouhi-qiu2gbbdf.liara.run/webhook-test/2f3b6a3a-f901-4695-b30a-e82f784f52d1');
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
