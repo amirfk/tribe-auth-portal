@@ -75,6 +75,12 @@ const AiCoach = () => {
     setIsLoading(true);
 
     try {
+      console.log('Sending message to webhook:', {
+        url: webhookUrl,
+        message: currentMessage,
+        user_id: user?.id
+      });
+
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -87,7 +93,15 @@ const AiCoach = () => {
         })
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const data = await response.json();
+      console.log('Response data:', data);
 
       // Handle different response formats from n8n
       let aiResponseText = '';
@@ -99,6 +113,7 @@ const AiCoach = () => {
         // Old format: { response: "text" } or { message: "text" }
         aiResponseText = data.response || data.message;
       } else {
+        console.log('Unexpected response format:', data);
         aiResponseText = 'متأسفم، نتوانستم پاسخ مناسبی دریافت کنم.';
       }
 
