@@ -17,7 +17,7 @@ serve(async (req) => {
     const requestBody = await req.json();
     
     // Forward request to n8n webhook
-    const n8nWebhookUrl = 'https://n8n-jbohdzzc.eu-central-1.clawcloudrun.com/webhook/e17c29e6-2e64-45bb-a9c4-6ebe5b65b9c0';
+    const n8nWebhookUrl = 'https://farhadkouhi-qiu2gbbdf.liara.run/webhook/2f3b6a3a-f901-4695-b30a-e82f784f52d1';
     
     console.log('Forwarding request to n8n webhook:', requestBody);
     
