@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { Send, Bot, User, ExternalLink, MessageCircle, Sparkles } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
   id: string;
@@ -33,7 +34,7 @@ const AiCoach = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chatEnded, setChatEnded] = useState(false);
   const [result, setResult] = useState<ChatResult | null>(null);
-  const [webhookUrl] = useState('https://farhadkouhi-qiu2gbbdf.liara.run/webhook/2f3b6a3a-f901-4695-b30a-e82f784f52d1');
+  
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -52,14 +53,7 @@ const AiCoach = () => {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!currentMessage.trim() || !webhookUrl.trim()) {
-      if (!webhookUrl.trim()) {
-        toast({
-          title: 'خطا',
-          description: 'لطفاً ابتدا آدرس webhook را وارد کنید',
-          variant: 'destructive'
-        });
-      }
+    if (!currentMessage.trim()) {
       return;
     }
 
@@ -75,33 +69,24 @@ const AiCoach = () => {
     setIsLoading(true);
 
     try {
-      console.log('Sending message to webhook:', {
-        url: webhookUrl,
+      console.log('Sending message via Supabase edge function:', {
         message: currentMessage,
         user_id: user?.id
       });
 
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('ai-coach-proxy', {
+        body: {
           message: currentMessage,
           user_id: user?.id,
           timestamp: new Date().toISOString()
-        })
+        }
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      if (error) {
+        throw new Error(error.message);
       }
 
-      const data = await response.json();
-      console.log('Response data:', data);
+      console.log('Response data from edge function:', data);
 
       // Handle different response formats from n8n
       let aiResponseText = '';
@@ -314,13 +299,13 @@ const AiCoach = () => {
                   onChange={(e) => setCurrentMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="پیام خود را بنویسید..."
-                  disabled={isLoading || !webhookUrl}
+                  disabled={isLoading}
                   className="flex-1 bg-background/80 border-primary/20 focus:border-primary/40 text-base rounded-xl"
                   style={{ direction: 'rtl' }}
                 />
                 <Button 
                   onClick={sendMessage} 
-                  disabled={isLoading || !currentMessage.trim() || !webhookUrl}
+                  disabled={isLoading || !currentMessage.trim()}
                   size="icon"
                   className="h-11 w-11 rounded-xl bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg"
                 >
