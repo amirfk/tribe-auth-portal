@@ -22,7 +22,7 @@ serve(async (req) => {
     console.log('Forwarding request to n8n webhook:', requestBody);
     
     const response = await fetch(n8nWebhookUrl, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
