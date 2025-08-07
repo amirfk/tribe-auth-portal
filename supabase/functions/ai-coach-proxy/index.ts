@@ -23,7 +23,7 @@ serve(async (req) => {
     
     // Add timeout and better error handling
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // Increase to 60 seconds
     
     try {
       const response = await fetch(n8nWebhookUrl, {
@@ -38,10 +38,22 @@ serve(async (req) => {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const responseData = await response.json();
+      const responseText = await response.text();
+      console.log('Raw response from n8n webhook:', responseText);
+      
+      let responseData;
+      try {
+        responseData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        console.error('Response text that failed to parse:', responseText);
+        // If JSON parsing fails, treat it as a plain text response
+        responseData = [{ output: responseText }];
+      }
       console.log('Received response from n8n webhook:', responseData);
 
       return new Response(JSON.stringify(responseData), {
