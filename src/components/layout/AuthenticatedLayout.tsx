@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
-import { LogOut, MessageCircle, LayoutDashboard, User } from 'lucide-react';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { LogOut, MessageCircle, LayoutDashboard, User, Shield } from 'lucide-react';
 
 interface AuthenticatedLayoutProps {
   children: ReactNode;
@@ -10,6 +11,7 @@ interface AuthenticatedLayoutProps {
 
 export const AuthenticatedLayout = ({ children }: AuthenticatedLayoutProps) => {
   const { signOut, user } = useAuth();
+  const { isAdmin } = useAdminAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -65,6 +67,21 @@ export const AuthenticatedLayout = ({ children }: AuthenticatedLayoutProps) => {
                   مشاور هوشمند
                 </Button>
               </Link>
+
+              {isAdmin && (
+                <Link to="/admin">
+                  <Button 
+                    variant={isActive('/admin') ? 'default' : 'ghost'}
+                    className={`gap-2 ${isActive('/admin') 
+                      ? 'bg-gradient-to-r from-primary to-accent text-white' 
+                      : 'text-primary hover:bg-primary/10'
+                    }`}
+                  >
+                    <Shield size={16} />
+                    پنل مدیریت
+                  </Button>
+                </Link>
+              )}
 
               {/* User Menu */}
               <div className="flex items-center gap-2 ml-4 pl-4 border-l border-primary/20">

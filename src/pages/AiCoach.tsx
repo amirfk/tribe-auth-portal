@@ -65,6 +65,7 @@ const AiCoach = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageText = currentMessage;
     setCurrentMessage('');
     setIsLoading(true);
 
@@ -76,7 +77,7 @@ const AiCoach = () => {
 
       const { data, error } = await supabase.functions.invoke('ai-coach-proxy', {
         body: {
-          message: currentMessage,
+          message: messageText,
           user_id: user?.id,
           timestamp: new Date().toISOString()
         }
@@ -139,6 +140,18 @@ const AiCoach = () => {
           timestamp: new Date()
         };
         setMessages(prev => [...prev, aiMessage]);
+      }
+
+      // Save message to database
+      try {
+        await supabase.from('chat_messages').insert({
+          user_id: user?.id,
+          message: messageText,
+          response: aiResponseText,
+          session_id: `session_${Date.now()}`
+        });
+      } catch (dbError) {
+        console.error('Error saving message to database:', dbError);
       }
     } catch (error) {
       console.error('Error sending message:', error);
