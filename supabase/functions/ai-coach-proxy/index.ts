@@ -21,29 +21,53 @@ serve(async (req) => {
     
     console.log('Forwarding request to n8n webhook:', requestBody);
     
-    const response = await fetch(n8nWebhookUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody)
-    });
+    // Add timeout and better error handling
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    
+    try {
+      const response = await fetch(n8nWebhookUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+        signal: controller.signal
+      });
 
-    const responseData = await response.json();
-    console.log('Received response from n8n webhook:', responseData);
+      clearTimeout(timeoutId);
 
-    return new Response(JSON.stringify(responseData), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: response.status
-    });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log('Received response from n8n webhook:', responseData);
+
+      return new Response(JSON.stringify(responseData), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: response.status
+      });
+
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      console.error('Fetch error:', fetchError);
+      
+      // Return a fallback response when the webhook is unreachable
+      return new Response(JSON.stringify([{ 
+        output: "متأسفم، در حال حاضر سرویس در دسترس نیست. لطفاً بعداً دوباره تلاش کنید." 
+      }]), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200 // Return 200 to prevent client-side error
+      });
+    }
 
   } catch (error) {
     console.error('Error in ai-coach-proxy:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Proxy error', 
-      message: error.message 
-    }), {
-      status: 500,
+    return new Response(JSON.stringify([{ 
+      output: "متأسفم، خطایی در پردازش درخواست رخ داد. لطفاً دوباره تلاش کنید." 
+    }]), {
+      status: 200, // Return 200 with error message instead of 500
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
