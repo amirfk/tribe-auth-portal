@@ -70,15 +70,19 @@ const AiCoach = () => {
     setIsLoading(true);
 
     try {
+      // Ensure we use the freshest authenticated user
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      const currentUserId = authUser?.id;
+
       console.log('Sending message via Supabase edge function:', {
         message: currentMessage,
-        user_id: user?.id
+        user_id: currentUserId
       });
 
       const { data, error } = await supabase.functions.invoke('ai-coach-proxy', {
         body: {
           message: messageText,
-          user_id: user?.id,
+          user_id: currentUserId,
           timestamp: new Date().toISOString()
         }
       });
@@ -145,7 +149,7 @@ const AiCoach = () => {
       // Save message to database
       try {
         await supabase.from('chat_messages').insert({
-          user_id: user?.id,
+          user_id: currentUserId,
           message: messageText,
           response: aiResponseText,
           session_id: `session_${Date.now()}`
