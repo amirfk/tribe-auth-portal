@@ -11,6 +11,7 @@ import { Trash2, Shield, User } from 'lucide-react';
 interface UserWithRole {
   id: string;
   full_name: string;
+  email?: string | null;
   avatar_url: string | null;
   created_at: string;
   role: string;
@@ -105,7 +106,7 @@ export const UserManagement = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>نام</TableHead>
+              <TableHead>نام / ایمیل</TableHead>
               <TableHead>تاریخ ثبت‌نام</TableHead>
               <TableHead>نقش</TableHead>
               <TableHead>عملیات</TableHead>
@@ -115,7 +116,10 @@ export const UserManagement = () => {
             {users.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="font-medium">
-                  {user.full_name || 'نام تنظیم نشده'}
+                  <div className="flex flex-col">
+                    <span>{user.full_name || 'نام تنظیم نشده'}</span>
+                    <span className="text-xs text-muted-foreground">{user.email ?? '—'}</span>
+                  </div>
                 </TableCell>
                 <TableCell>
                   {new Date(user.created_at).toLocaleDateString('fa-IR')}
