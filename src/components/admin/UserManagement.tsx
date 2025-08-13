@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Trash2, Shield, User } from 'lucide-react';
+import { Trash2, Shield, User, Link, ExternalLink } from 'lucide-react';
 
 interface UserWithRole {
   id: string;
@@ -15,6 +15,10 @@ interface UserWithRole {
   avatar_url: string | null;
   created_at: string;
   role: string;
+  wordpress_user_id?: number | null;
+  wordpress_username?: string | null;
+  sync_source?: string | null;
+  last_synced_at?: string | null;
 }
 
 export const UserManagement = () => {
@@ -109,6 +113,7 @@ export const UserManagement = () => {
               <TableHead>نام / ایمیل</TableHead>
               <TableHead>تاریخ ثبت‌نام</TableHead>
               <TableHead>نقش</TableHead>
+              <TableHead>وضعیت وردپرس</TableHead>
               <TableHead>عملیات</TableHead>
             </TableRow>
           </TableHeader>
@@ -138,6 +143,23 @@ export const UserManagement = () => {
                       </>
                     )}
                   </Badge>
+                </TableCell>
+                <TableCell>
+                  {user.wordpress_user_id ? (
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-green-600 border-green-600">
+                        <Link className="h-3 w-3 mr-1" />
+                        متصل
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        WP#{user.wordpress_user_id}
+                      </span>
+                    </div>
+                  ) : (
+                    <Badge variant="outline" className="text-gray-500">
+                      عدم اتصال
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">

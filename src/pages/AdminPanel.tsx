@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AdminStats } from '@/components/admin/AdminStats';
 import { UserManagement } from '@/components/admin/UserManagement';
 import { ChatHistory } from '@/components/admin/ChatHistory';
+import { IntegrationSettings } from '@/components/admin/IntegrationSettings';
 import { BarChart3, Users, MessageSquare, Settings } from 'lucide-react';
 
 const AdminPanel = () => {
@@ -48,13 +49,7 @@ const AdminPanel = () => {
         </TabsContent>
 
         <TabsContent value="settings" className="space-y-6">
-          <div className="text-center py-12">
-            <Settings className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-2">تنظیمات سیستم</h3>
-            <p className="text-muted-foreground">
-              این بخش در حال توسعه است
-            </p>
-          </div>
+          <IntegrationSettings />
         </TabsContent>
       </Tabs>
     </div>
