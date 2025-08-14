@@ -142,23 +142,69 @@ export const IntegrationSettings = () => {
     }
   };
 
-  const syncAllUsers = async () => {
+  const syncSupabaseToWordPress = async () => {
+    if (!settings.wordpress_url || !settings.wordpress_api_key || !settings.wordpress_api_secret) {
+      toast({
+        title: "خطا",
+        description: "لطفا تمام تنظیمات وردپرس را تکمیل کنید",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       toast({
         title: "شروع همگام‌سازی",
-        description: "همگام‌سازی کاربران شروع شد...",
+        description: "همگام‌سازی کاربران از Supabase به WordPress شروع شد...",
       });
 
-      // This would typically be handled by webhooks
-      // For now, we'll just show a success message
+      // Get all Supabase users without WordPress user_id
+      const { data: users, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .is('wordpress_user_id', null);
+
+      if (error) throw error;
+
+      if (!users || users.length === 0) {
+        toast({
+          title: "اطلاع",
+          description: "کاربری برای همگام‌سازی یافت نشد",
+        });
+        return;
+      }
+
+      // Sync each user to WordPress
+      for (const user of users) {
+        try {
+          const { error: syncError } = await supabase.functions.invoke('wordpress-sync', {
+            body: {
+              action: 'sync_supabase_user_to_wordpress',
+              data: {
+                user_id: user.id,
+                email: user.email,
+                display_name: user.full_name || user.email?.split('@')[0],
+              }
+            }
+          });
+
+          if (syncError) {
+            console.error('Error syncing user:', user.email, syncError);
+          }
+        } catch (userError) {
+          console.error('Error syncing individual user:', user.email, userError);
+        }
+      }
+
       toast({
         title: "موفقیت",
-        description: "همگام‌سازی کاربران تکمیل شد",
+        description: `همگام‌سازی ${users.length} کاربر به WordPress تکمیل شد`,
       });
     } catch (error) {
+      console.error('Error syncing users to WordPress:', error);
       toast({
         title: "خطا",
-        description: "خطا در همگام‌سازی کاربران",
+        description: "خطا در همگام‌سازی کاربران به WordPress",
         variant: "destructive",
       });
     }
@@ -247,9 +293,9 @@ export const IntegrationSettings = () => {
             </Button>
 
             {connectionStatus === 'connected' && (
-              <Button variant="secondary" onClick={syncAllUsers}>
+              <Button variant="secondary" onClick={syncSupabaseToWordPress}>
                 <RefreshCw className="h-4 w-4 mr-2" />
-                همگام‌سازی کاربران
+                همگام‌سازی کاربران به WordPress
               </Button>
             )}
           </div>
