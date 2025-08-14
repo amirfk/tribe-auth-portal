@@ -84,14 +84,22 @@ class SupabaseUserSync {
         <script>
         jQuery(document).ready(function($) {
             $('#test-connection').click(function() {
+                var button = $(this);
+                button.prop('disabled', true).text('Testing...');
+                $('#sync-results').html('<div class="notice notice-info"><p>Testing connection...</p></div>');
+                
                 $.post(ajaxurl, {
                     action: 'test_supabase_connection'
                 }, function(response) {
                     if (response.success) {
-                        $('#sync-results').html('<div class="notice notice-success"><p>Connection successful!</p></div>');
+                        $('#sync-results').html('<div class="notice notice-success"><p>' + response.data + '</p></div>');
                     } else {
-                        $('#sync-results').html('<div class="notice notice-error"><p>Connection failed: ' + response.data + '</p></div>');
+                        $('#sync-results').html('<div class="notice notice-error"><p>' + response.data + '</p></div>');
                     }
+                }).fail(function(xhr, status, error) {
+                    $('#sync-results').html('<div class="notice notice-error"><p>Request failed: ' + error + '</p></div>');
+                }).always(function() {
+                    button.prop('disabled', false).text('Test Connection');
                 });
             });
             
@@ -162,11 +170,14 @@ class SupabaseUserSync {
             wp_send_json_error('Supabase URL not configured');
         }
         
-        $response = wp_remote_get($this->supabase_function_url, [
+        // Add the test_connection action parameter to the URL
+        $test_url = $this->supabase_function_url . '?action=test_connection';
+        
+        $response = wp_remote_get($test_url, [
             'headers' => [
                 'Authorization' => 'Bearer ' . get_option('supabase_anon_key', '')
             ],
-            'timeout' => 10
+            'timeout' => 15
         ]);
         
         if (is_wp_error($response)) {
@@ -174,10 +185,33 @@ class SupabaseUserSync {
         }
         
         $code = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        
+        // Log the response for debugging
+        error_log('Supabase test connection response: ' . $code . ' - ' . $body);
+        
         if ($code === 200) {
-            wp_send_json_success('Connection successful');
+            $data = json_decode($body, true);
+            if ($data && isset($data['success']) && $data['success']) {
+                $message = isset($data['message']) ? $data['message'] : 'Connection successful';
+                if (isset($data['wordpress_user'])) {
+                    $message .= ' - Connected as: ' . $data['wordpress_user']['name'];
+                }
+                wp_send_json_success($message);
+            } else {
+                $error = isset($data['error']) ? $data['error'] : 'Unknown error';
+                wp_send_json_error('Connection failed: ' . $error);
+            }
         } else {
-            wp_send_json_error('HTTP ' . $code . ': ' . wp_remote_retrieve_body($response));
+            // Try to parse JSON error response
+            $data = json_decode($body, true);
+            $error_message = 'HTTP ' . $code;
+            if ($data && isset($data['error'])) {
+                $error_message .= ': ' . $data['error'];
+            } else {
+                $error_message .= ': ' . $body;
+            }
+            wp_send_json_error($error_message);
         }
     }
     
