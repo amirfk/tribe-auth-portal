@@ -35,10 +35,31 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { action, data } = await req.json()
-    console.log('WordPress sync request:', { action, data })
+    // Handle different request types
+    let action, data;
+    const url = new URL(req.url);
+    
+    if (req.method === 'GET') {
+      action = url.searchParams.get('action') || 'test_connection';
+      data = Object.fromEntries(url.searchParams.entries());
+    } else {
+      const contentType = req.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const body = await req.json();
+        action = body.action;
+        data = body.data;
+      } else {
+        action = 'test_connection';
+        data = {};
+      }
+    }
+    
+    console.log('WordPress sync request:', { method: req.method, action, data })
 
     switch (action) {
+      case 'test_connection':
+        return await testConnection(supabaseClient, data)
+      
       case 'sync_wordpress_user_to_supabase':
         return await syncWordPressUserToSupabase(supabaseClient, data)
       
@@ -213,6 +234,78 @@ async function syncSupabaseUserToWordPress(supabaseClient: any, supabaseUser: Su
     JSON.stringify({ success: true, wordpress_user_id: wpUser.id }),
     { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
   )
+}
+
+async function testConnection(supabaseClient: any, data: any) {
+  try {
+    // Get WordPress API settings
+    const { data: settings } = await supabaseClient
+      .from('integration_settings')
+      .select('setting_key, setting_value')
+      .in('setting_key', ['wordpress_url', 'wordpress_api_key', 'wordpress_api_secret'])
+
+    const settingsMap = settings?.reduce((acc: any, setting: any) => {
+      acc[setting.setting_key] = setting.setting_value
+      return acc
+    }, {}) || {}
+
+    // Use settings from URL params if available (for testing before saving)
+    const wpUrl = data.wordpress_url || settingsMap.wordpress_url
+    const wpApiKey = data.wordpress_api_key || settingsMap.wordpress_api_key
+    const wpApiSecret = data.wordpress_api_secret || settingsMap.wordpress_api_secret
+
+    if (!wpUrl || !wpApiKey || !wpApiSecret) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'WordPress credentials not provided' 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Test the WordPress REST API connection
+    const response = await fetch(`${wpUrl}/wp-json/wp/v2/users/me`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Basic ${btoa(`${wpApiKey}:${wpApiSecret}`)}`
+      }
+    })
+
+    if (response.ok) {
+      const userInfo = await response.json()
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: 'Connection successful',
+          wordpress_user: {
+            id: userInfo.id,
+            username: userInfo.username,
+            name: userInfo.name
+          }
+        }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      const errorText = await response.text()
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: `WordPress API error: ${response.status} - ${errorText}` 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+  } catch (error) {
+    console.error('Test connection error:', error)
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: `Connection failed: ${error.message}` 
+      }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+  }
 }
 
 async function getSyncStatus(supabaseClient: any, data: { user_id: string }) {
