@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -131,6 +131,63 @@ export type Database = {
         }
         Relationships: []
       }
+      woocommerce_products: {
+        Row: {
+          categories: string[] | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          in_stock: boolean | null
+          last_synced_at: string | null
+          name: string
+          price: number | null
+          product_url: string | null
+          regular_price: number | null
+          sale_price: number | null
+          short_description: string | null
+          status: string | null
+          updated_at: string
+          woocommerce_id: number
+        }
+        Insert: {
+          categories?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          in_stock?: boolean | null
+          last_synced_at?: string | null
+          name: string
+          price?: number | null
+          product_url?: string | null
+          regular_price?: number | null
+          sale_price?: number | null
+          short_description?: string | null
+          status?: string | null
+          updated_at?: string
+          woocommerce_id: number
+        }
+        Update: {
+          categories?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          in_stock?: boolean | null
+          last_synced_at?: string | null
+          name?: string
+          price?: number | null
+          product_url?: string | null
+          regular_price?: number | null
+          sale_price?: number | null
+          short_description?: string | null
+          status?: string | null
+          updated_at?: string
+          woocommerce_id?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -138,8 +195,8 @@ export type Database = {
     Functions: {
       has_role: {
         Args: {
-          _user_id: string
           _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
         }
         Returns: boolean
       }

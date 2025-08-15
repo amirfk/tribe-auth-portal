@@ -23,6 +23,21 @@ interface SupabaseUser {
   wordpress_username?: string;
 }
 
+interface WooCommerceProduct {
+  id: number;
+  name: string;
+  description: string;
+  short_description: string;
+  price: string;
+  sale_price: string;
+  regular_price: string;
+  images: Array<{ src: string }>;
+  permalink: string;
+  categories: Array<{ name: string }>;
+  status: string;
+  stock_status: string;
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -68,6 +83,12 @@ serve(async (req) => {
       
       case 'get_sync_status':
         return await getSyncStatus(supabaseClient, data)
+      
+      case 'sync_woocommerce_products':
+        return await syncWooCommerceProducts(supabaseClient)
+      
+      case 'test_products_connection':
+        return await testProductsConnection(supabaseClient)
       
       default:
         return new Response(
@@ -328,4 +349,191 @@ async function getSyncStatus(supabaseClient: any, data: { user_id: string }) {
     }),
     { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
   )
+}
+
+async function syncWooCommerceProducts(supabaseClient: any) {
+  try {
+    console.log('Starting WooCommerce products sync...');
+
+    // Get WordPress API credentials
+    const { data: settings, error: settingsError } = await supabaseClient
+      .from('integration_settings')
+      .select('setting_key, setting_value')
+      .in('setting_key', ['wordpress_url', 'wordpress_api_key', 'wordpress_api_secret']);
+
+    if (settingsError) {
+      throw new Error(`Failed to get settings: ${settingsError.message}`);
+    }
+
+    const settingsMap = settings?.reduce((acc: any, setting: any) => {
+      acc[setting.setting_key] = setting.setting_value;
+      return acc;
+    }, {}) || {};
+
+    const { wordpress_url, wordpress_api_key, wordpress_api_secret } = settingsMap;
+
+    if (!wordpress_url || !wordpress_api_key || !wordpress_api_secret) {
+      throw new Error('WordPress API credentials not configured');
+    }
+
+    // Fetch products from WooCommerce API
+    const auth = btoa(`${wordpress_api_key}:${wordpress_api_secret}`);
+    const apiUrl = `${wordpress_url}/wp-json/wc/v3/products?per_page=100&status=publish`;
+
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`WooCommerce API error: ${response.status} ${response.statusText}`);
+    }
+
+    const products: WooCommerceProduct[] = await response.json();
+    console.log(`Fetched ${products.length} products from WooCommerce`);
+
+    // Process and insert/update products
+    const syncResults = [];
+    for (const product of products) {
+      try {
+        const productData = {
+          woocommerce_id: product.id,
+          name: product.name,
+          description: product.description?.replace(/<[^>]*>/g, '') || '', // Remove HTML tags
+          short_description: product.short_description?.replace(/<[^>]*>/g, '') || '',
+          price: parseFloat(product.price) || 0,
+          sale_price: product.sale_price ? parseFloat(product.sale_price) : null,
+          regular_price: parseFloat(product.regular_price) || 0,
+          image_url: product.images?.[0]?.src || null,
+          product_url: product.permalink,
+          categories: product.categories?.map(cat => cat.name) || [],
+          status: product.status,
+          in_stock: product.stock_status === 'instock',
+          last_synced_at: new Date().toISOString()
+        };
+
+        // Upsert product (insert or update)
+        const { error: upsertError } = await supabaseClient
+          .from('woocommerce_products')
+          .upsert(productData, { 
+            onConflict: 'woocommerce_id',
+            ignoreDuplicates: false 
+          });
+
+        if (upsertError) {
+          console.error(`Error syncing product ${product.id}:`, upsertError);
+          syncResults.push({ product_id: product.id, status: 'error', error: upsertError.message });
+        } else {
+          syncResults.push({ product_id: product.id, status: 'success' });
+        }
+      } catch (error) {
+        console.error(`Error processing product ${product.id}:`, error);
+        syncResults.push({ product_id: product.id, status: 'error', error: error.message });
+      }
+    }
+
+    const successCount = syncResults.filter(r => r.status === 'success').length;
+    const errorCount = syncResults.filter(r => r.status === 'error').length;
+
+    console.log(`Products sync completed: ${successCount} successful, ${errorCount} errors`);
+
+    return new Response(
+      JSON.stringify({
+        message: 'Products sync completed',
+        total_products: products.length,
+        successful_syncs: successCount,
+        failed_syncs: errorCount,
+        sync_results: syncResults
+      }),
+      { 
+        status: 200, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    );
+
+  } catch (error) {
+    console.error('Error in syncWooCommerceProducts:', error);
+    return new Response(
+      JSON.stringify({ 
+        error: 'Failed to sync WooCommerce products',
+        details: error.message 
+      }),
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    );
+  }
+}
+
+async function testProductsConnection(supabaseClient: any) {
+  try {
+    console.log('Testing WooCommerce products API connection...');
+
+    // Get WordPress API credentials
+    const { data: settings, error: settingsError } = await supabaseClient
+      .from('integration_settings')
+      .select('setting_key, setting_value')
+      .in('setting_key', ['wordpress_url', 'wordpress_api_key', 'wordpress_api_secret']);
+
+    if (settingsError) {
+      throw new Error(`Failed to get settings: ${settingsError.message}`);
+    }
+
+    const settingsMap = settings?.reduce((acc: any, setting: any) => {
+      acc[setting.setting_key] = setting.setting_value;
+      return acc;
+    }, {}) || {};
+
+    const { wordpress_url, wordpress_api_key, wordpress_api_secret } = settingsMap;
+
+    if (!wordpress_url || !wordpress_api_key || !wordpress_api_secret) {
+      throw new Error('WordPress API credentials not configured');
+    }
+
+    // Test WooCommerce API connection
+    const auth = btoa(`${wordpress_api_key}:${wordpress_api_secret}`);
+    const apiUrl = `${wordpress_url}/wp-json/wc/v3/products?per_page=1`;
+
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`WooCommerce API error: ${response.status} ${response.statusText}`);
+    }
+
+    const products = await response.json();
+    
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'WooCommerce products API connection successful',
+        sample_products_count: Array.isArray(products) ? products.length : 0
+      }),
+      { 
+        status: 200, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    );
+
+  } catch (error) {
+    console.error('Error in testProductsConnection:', error);
+    return new Response(
+      JSON.stringify({ 
+        success: false,
+        error: 'Failed to test WooCommerce products connection',
+        details: error.message 
+      }),
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    );
+  }
 }

@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Save, TestTube, RefreshCw, AlertCircle } from 'lucide-react';
+import { Save, TestTube, RefreshCw, AlertCircle, Package, ShoppingCart } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface IntegrationSetting {
@@ -24,6 +24,10 @@ export const IntegrationSettings = () => {
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'unknown' | 'connected' | 'error'>('unknown');
+  const [isTestingProducts, setIsTestingProducts] = useState(false);
+  const [isSyncingProducts, setIsSyncingProducts] = useState(false);
+  const [productsConnected, setProductsConnected] = useState(false);
+  const [productsCount, setProductsCount] = useState(0);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -141,6 +145,96 @@ export const IntegrationSettings = () => {
       setTesting(false);
     }
   };
+
+  const testProductsConnection = async () => {
+    setIsTestingProducts(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('wordpress-sync', {
+        body: { action: 'test_products_connection' }
+      });
+
+      if (error) throw error;
+
+      if (data.success) {
+        setProductsConnected(true);
+        toast({
+          title: "موفقیت",
+          description: "اتصال به API محصولات WooCommerce برقرار شد",
+        });
+      } else {
+        setProductsConnected(false);
+        toast({
+          title: "خطا",
+          description: data.error || "خطا در اتصال به API محصولات WooCommerce",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      console.error('Products connection test error:', error);
+      setProductsConnected(false);
+      toast({
+        title: "خطا",
+        description: "خطا در تست اتصال محصولات: " + error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsTestingProducts(false);
+    }
+  };
+
+  const syncWooCommerceProducts = async () => {
+    setIsSyncingProducts(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('wordpress-sync', {
+        body: { action: 'sync_woocommerce_products' }
+      });
+
+      if (error) throw error;
+
+      setProductsCount(data.successful_syncs || 0);
+      toast({
+        title: "موفقیت",
+        description: `${data.successful_syncs} محصول با موفقیت از WooCommerce همگام‌سازی شد!`,
+      });
+      
+      if (data.failed_syncs > 0) {
+        toast({
+          title: "هشدار",
+          description: `${data.failed_syncs} محصول در همگام‌سازی ناموفق بود. جزئیات را در کنسول بررسی کنید.`,
+          variant: "destructive",
+        });
+      }
+
+      // Reload products count after sync
+      await loadProductsCount();
+    } catch (error: any) {
+      console.error('Products sync error:', error);
+      toast({
+        title: "خطا",
+        description: "خطا در همگام‌سازی محصولات: " + error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSyncingProducts(false);
+    }
+  };
+
+  const loadProductsCount = async () => {
+    try {
+      const { count, error } = await supabase
+        .from('woocommerce_products')
+        .select('*', { count: 'exact', head: true });
+
+      if (error) throw error;
+      setProductsCount(count || 0);
+    } catch (error) {
+      console.error('Error loading products count:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadProductsCount();
+  }, []);
 
   const syncSupabaseToWordPress = async () => {
     if (!settings.wordpress_url || !settings.wordpress_api_key || !settings.wordpress_api_secret) {
@@ -333,6 +427,61 @@ export const IntegrationSettings = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* WooCommerce Products Integration */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Package className="h-5 w-5" />
+            ادغام محصولات WooCommerce
+          </CardTitle>
+          <CardDescription>
+            همگام‌سازی و مدیریت محصولات WooCommerce برای نمایش در چت AI و سایر قابلیت‌ها
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+            <div className="flex items-center gap-2">
+              <ShoppingCart className="h-4 w-4" />
+              <span className="font-medium">محصولات در دیتابیس: {productsCount}</span>
+            </div>
+            {productsConnected && (
+              <Badge variant="default">
+                API محصولات متصل
+              </Badge>
+            )}
+          </div>
+
+          <div className="flex gap-2 flex-wrap">
+            <Button
+              onClick={testProductsConnection}
+              disabled={isTestingProducts || saving}
+              variant="outline"
+              size="sm"
+            >
+              <TestTube className="h-4 w-4 mr-2" />
+              {isTestingProducts ? "در حال تست..." : "تست API محصولات"}
+            </Button>
+
+            <Button
+              onClick={syncWooCommerceProducts}
+              disabled={isSyncingProducts || !settings.wordpress_url || !settings.wordpress_api_key || !settings.wordpress_api_secret}
+              size="sm"
+            >
+              <Package className="h-4 w-4 mr-2" />
+              {isSyncingProducts ? "در حال همگام‌سازی..." : "همگام‌سازی محصولات"}
+            </Button>
+          </div>
+
+          {productsCount > 0 && (
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-green-800">
+                ✅ {productsCount} محصول برای نمایش در چت AI و پیشنهادات در دسترس است.
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
