@@ -199,7 +199,7 @@ async function syncSupabaseUserToWordPress(supabaseClient: any, supabaseUser: Su
       email: supabaseUser.email,
       name: supabaseUser.full_name || 'User',
       password: crypto.randomUUID(),
-      roles: ['subscriber']
+      roles: ['customer']
     })
   })
 
