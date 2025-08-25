@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -7,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
   const { user } = useAuth();
+  
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Professional background */}
