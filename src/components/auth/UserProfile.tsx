@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Link } from 'react-router-dom';
-import { MessageCircle, Settings, LogOut, Sparkles } from 'lucide-react';
+import { MessageCircle, Settings, LogOut, Sparkles, BookOpen } from 'lucide-react';
+import { CourseRecommendations } from '@/components/ui/course-recommendations';
 
 interface Profile {
   id: string;
@@ -109,12 +110,19 @@ export const UserProfile = () => {
                 داشبورد شخصی
               </h1>
             </div>
-            <Link to="/ai-coach">
-              <Button className="gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-                <MessageCircle className="h-4 w-4" />
-                مشاور هوشمند
-              </Button>
-            </Link>
+            <div className="flex gap-2">
+              <Link to="/ai-coach" className="flex-1">
+                <Button className="w-full gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+                  <MessageCircle className="h-4 w-4" />
+                  مشاور هوشمند
+                </Button>
+              </Link>
+              <Link to="/courses">
+                <Button variant="outline" size="icon" className="border-primary/20 hover:bg-primary/5">
+                  <BookOpen className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </header>
 
@@ -216,6 +224,15 @@ export const UserProfile = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Course Recommendations */}
+            <div className="mt-6">
+              <CourseRecommendations 
+                limit={4} 
+                title="دوره‌های پیشنهادی برای شما" 
+                showHeader={true}
+              />
+            </div>
           </div>
         </div>
       </div>

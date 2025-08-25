@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import AiCoach from "./pages/AiCoach";
+import Courses from "./pages/Courses";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
@@ -43,6 +44,13 @@ const App = () => (
               <ProtectedRoute>
                 <AuthenticatedLayout>
                   <Dashboard />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/courses" element={
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <Courses />
                 </AuthenticatedLayout>
               </ProtectedRoute>
             } />

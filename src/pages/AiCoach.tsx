@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { Send, Bot, User, ExternalLink, MessageCircle, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { CourseRecommendations } from '@/components/ui/course-recommendations';
 
 interface Message {
   id: string;
@@ -305,6 +306,18 @@ const AiCoach = () => {
                   شروع کوچینگ با مینا
                 </Button>
               </div>
+            </div>
+          )}
+          
+          {/* Course Recommendations - Show after chat completion */}
+          {chatEnded && (
+            <div className="p-6 border-t border-primary/10">
+              <CourseRecommendations 
+                resultType={result?.result} 
+                limit={3} 
+                compact={true}
+                title="دوره‌های مرتبط برای شما"
+              />
             </div>
           )}
 
