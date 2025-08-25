@@ -2,9 +2,11 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Sparkles, MessageCircle, Shield, Heart } from 'lucide-react';
+import { Sparkles, MessageCircle, Shield, Heart, BookOpen, UserPlus } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Professional background */}
@@ -60,16 +62,22 @@ const Index = () => {
               جایی که رشد شخصی، کوچینگ حرفه‌ای و حمایت روانی در کنار هم قرار دارند
             </p>
             <div className="flex justify-center gap-4 flex-wrap">
-              <Link to="/register">
+              <Link to={user ? "/dashboard" : "/register"}>
                 <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-lg px-8 py-3 shadow-lg">
-                  <Sparkles className="mr-2 h-5 w-5" />
+                  <UserPlus className="mr-2 h-5 w-5" />
                   شروع سفر رشد
                 </Button>
               </Link>
-              <Link to="/login">
+              <Link to={user ? "/ai-coach" : "/register"}>
                 <Button variant="outline" className="border-primary/30 text-primary hover:bg-primary/10 text-lg px-8 py-3">
                   <MessageCircle className="mr-2 h-5 w-5" />
                   مشاور هوشمند
+                </Button>
+              </Link>
+              <Link to="/courses">
+                <Button variant="secondary" className="bg-gradient-to-r from-secondary to-secondary/80 hover:from-secondary/90 hover:to-secondary/70 text-lg px-8 py-3 shadow-lg">
+                  <BookOpen className="mr-2 h-5 w-5" />
+                  مشاهده دوره‌ها
                 </Button>
               </Link>
             </div>

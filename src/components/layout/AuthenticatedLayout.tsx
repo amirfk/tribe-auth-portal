@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { LogOut, MessageCircle, LayoutDashboard, User, Shield } from 'lucide-react';
+import { LogOut, MessageCircle, LayoutDashboard, User, Shield, BookOpen } from 'lucide-react';
 
 interface AuthenticatedLayoutProps {
   children: ReactNode;
@@ -65,6 +65,19 @@ export const AuthenticatedLayout = ({ children }: AuthenticatedLayoutProps) => {
                 >
                   <MessageCircle size={16} />
                   مشاور هوشمند
+                </Button>
+              </Link>
+
+              <Link to="/courses">
+                <Button 
+                  variant={isActive('/courses') ? 'default' : 'ghost'}
+                  className={`gap-2 ${isActive('/courses') 
+                    ? 'bg-gradient-to-r from-primary to-accent text-white' 
+                    : 'text-primary hover:bg-primary/10'
+                  }`}
+                >
+                  <BookOpen size={16} />
+                  دوره‌ها
                 </Button>
               </Link>
 
