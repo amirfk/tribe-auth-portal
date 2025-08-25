@@ -62,12 +62,6 @@ const Index = () => {
               جایی که رشد شخصی، کوچینگ حرفه‌ای و حمایت روانی در کنار هم قرار دارند
             </p>
             <div className="flex justify-center gap-4 flex-wrap">
-              <Link to={user ? "/dashboard" : "/register"}>
-                <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-lg px-8 py-3 shadow-lg">
-                  <UserPlus className="mr-2 h-5 w-5" />
-                  شروع سفر رشد
-                </Button>
-              </Link>
               <Link to={user ? "/ai-coach" : "/register"}>
                 <Button variant="outline" className="border-primary/30 text-primary hover:bg-primary/10 text-lg px-8 py-3">
                   <MessageCircle className="mr-2 h-5 w-5" />
