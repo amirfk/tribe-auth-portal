@@ -91,20 +91,20 @@ export function ProductRecommendations({
   };
 
   return (
-    <Card className="w-full bg-card/95 backdrop-blur-sm border-primary/10">
+    <Card className="w-full bg-card/95 backdrop-blur-sm border-primary/10" dir="rtl">
       {showHeader && (
         <CardHeader className="pb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between flex-row-reverse">
+            <div className="flex items-center gap-2 flex-row-reverse">
               <BookOpen className="h-5 w-5 text-primary" />
-              <CardTitle className="text-lg">
+              <CardTitle className="text-lg text-right">
                 {getDefaultTitle()}
               </CardTitle>
             </div>
             <Link to="/store">
               <Button variant="ghost" size="sm" className="gap-1 text-primary hover:text-primary/80">
                 مشاهده همه
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 ml-1" />
               </Button>
             </Link>
           </div>
@@ -114,7 +114,7 @@ export function ProductRecommendations({
         <div className={`grid gap-4 ${
           compact 
             ? 'grid-cols-1' 
-            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+            : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
         }`}>
           {relevantProducts.map((product) => (
             <ProductCard 
