@@ -4,48 +4,45 @@
 
 @layer base {
   :root {
-    /* Mina's Tribe Color Palette */
-    --background: 42 100% 97%; /* Soft White #FAFAFA */
-    --foreground: 210 29% 24%; /* Dark Slate #2C3E50 */
+    /* Warm, professional office background */
+    --background: 44 38% 97%;
+    --foreground: 180 15% 15%;
 
-    /* Card backgrounds with warm beige tint */
-    --card: 42 100% 98%; /* Slightly warmer white */
-    --card-foreground: 210 29% 24%;
+    /* Soft card backgrounds for depth */
+    --card: 0 0% 100%;
+    --card-foreground: 180 15% 15%;
 
-    --popover: 42 100% 98%;
-    --popover-foreground: 210 29% 24%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 180 15% 15%;
 
-    /* Primary: Emerald Green #2BB673 */
-    --primary: 141 67% 44%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary: Deep teal from logo */
+    --primary: 180 55% 35%;
+    --primary-foreground: 0 0% 98%;
 
-    /* Secondary: Teal #008C95 */
-    --secondary: 185 100% 29%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary: Light blue-grey from logo gradient */
+    --secondary: 200 25% 88%;
+    --secondary-foreground: 180 55% 25%;
 
-    /* Muted: Cool Gray #7F8C8D */
-    --muted: 184 9% 52%;
-    --muted-foreground: 210 29% 24%;
+    /* Muted warm greys for professional feel */
+    --muted: 44 20% 94%;
+    --muted-foreground: 180 10% 45%;
 
-    /* Accent: Turquoise #00C9A7 */
-    --accent: 170 100% 39%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent: Soft teal accent */
+    --accent: 185 40% 75%;
+    --accent-foreground: 180 55% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Borders with warm beige tint */
-    --border: 40 33% 87%;
-    --input: 40 33% 90%;
-    --ring: 141 67% 44%;
+    /* Professional borders */
+    --border: 200 15% 85%;
+    --input: 200 15% 90%;
+    --ring: 180 55% 35%;
 
-    /* Custom Mina's Tribe tokens */
-    --turquoise-gradient: linear-gradient(135deg, hsl(170 100% 39%), hsl(85 100% 78%));
-    --cta-gradient: linear-gradient(135deg, hsl(141 67% 44%), hsl(185 100% 29%));
-    --hero-gradient: linear-gradient(135deg, hsl(170 100% 39%) 0%, hsl(85 100% 78%) 100%);
-    --warm-beige: 42 100% 94%; /* Warm Beige #FFF4E6 */
-    --soft-peach: 32 100% 83%; /* Soft Peach #FFD6A5 */
-    --lime-green: 85 100% 78%; /* From gradient #92FE9D */
+    /* Coach office atmosphere */
+    --coach-gradient: linear-gradient(135deg, hsl(185 60% 45%), hsl(200 45% 60%));
+    --warm-shadow: 44 20% 85%;
+    --office-accent: 185 50% 85%;
 
     --radius: 0.5rem;
 
@@ -67,42 +64,39 @@
   }
 
   .dark {
-    /* Dark Mina's Tribe theme */
-    --background: 210 29% 12%;
-    --foreground: 42 100% 95%;
+    /* Dark professional office */
+    --background: 180 20% 8%;
+    --foreground: 200 15% 90%;
 
-    --card: 210 29% 15%;
-    --card-foreground: 42 100% 95%;
+    --card: 180 15% 12%;
+    --card-foreground: 200 15% 90%;
 
-    --popover: 210 29% 15%;
-    --popover-foreground: 42 100% 95%;
+    --popover: 180 15% 12%;
+    --popover-foreground: 200 15% 90%;
 
-    --primary: 141 67% 55%; /* Lighter emerald for dark mode */
-    --primary-foreground: 210 29% 12%;
+    --primary: 185 60% 50%;
+    --primary-foreground: 180 20% 8%;
 
-    --secondary: 185 100% 40%; /* Lighter teal */
-    --secondary-foreground: 210 29% 12%;
+    --secondary: 180 15% 18%;
+    --secondary-foreground: 200 15% 85%;
 
-    --muted: 210 29% 18%;
-    --muted-foreground: 184 9% 65%;
+    --muted: 180 15% 15%;
+    --muted-foreground: 200 10% 65%;
 
-    --accent: 170 100% 50%; /* Lighter turquoise */
-    --accent-foreground: 210 29% 12%;
+    --accent: 185 40% 35%;
+    --accent-foreground: 200 15% 90%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 210 29% 20%;
-    --input: 210 29% 18%;
-    --ring: 141 67% 55%;
+    --border: 180 15% 20%;
+    --input: 180 15% 18%;
+    --ring: 185 60% 50%;
 
-    /* Dark theme custom tokens */
-    --turquoise-gradient: linear-gradient(135deg, hsl(170 100% 50%), hsl(85 100% 85%));
-    --cta-gradient: linear-gradient(135deg, hsl(141 67% 55%), hsl(185 100% 40%));
-    --hero-gradient: linear-gradient(135deg, hsl(170 100% 50%) 0%, hsl(85 100% 85%) 100%);
-    --warm-beige: 210 29% 18%;
-    --soft-peach: 32 60% 25%;
-    --lime-green: 85 60% 40%;
+    /* Dark coach office atmosphere */
+    --coach-gradient: linear-gradient(135deg, hsl(185 50% 25%), hsl(200 35% 35%));
+    --warm-shadow: 180 15% 5%;
+    --office-accent: 185 40% 25%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -120,63 +114,6 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body;
-    direction: rtl;
-  }
-
-  /* Persian Typography */
-  .font-heading {
-    font-family: 'Nunito', 'Poppins', system-ui, -apple-system, sans-serif;
-    font-weight: 700;
-  }
-
-  .font-body {
-    font-family: 'Nunito', 'Inter', system-ui, -apple-system, sans-serif;
-    font-weight: 400;
-  }
-
-  .font-accent {
-    font-family: 'Nunito', 'Poppins', system-ui, -apple-system, sans-serif;
-    font-weight: 500;
-    font-style: italic;
-  }
-
-  /* Animations for alive feel */
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes glow {
-    0%, 100% { box-shadow: 0 0 5px hsl(var(--primary) / 0.3); }
-    50% { box-shadow: 0 0 20px hsl(var(--primary) / 0.6), 0 0 30px hsl(var(--primary) / 0.4); }
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.6s ease-out;
-  }
-
-  .animate-glow {
-    animation: glow 2s ease-in-out infinite;
-  }
-
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  /* Button hover effects */
-  .btn-glow:hover {
-    animation: glow 0.3s ease-in-out;
+    @apply bg-background text-foreground;
   }
 }

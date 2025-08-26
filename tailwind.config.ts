@@ -62,23 +62,9 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Mina's Tribe custom colors
-				'turquoise': 'hsl(170 100% 39%)', // #00C9A7
-				'lime-green': 'hsl(85 100% 78%)', // #92FE9D
-				'soft-peach': 'hsl(32 100% 83%)', // #FFD6A5
-				'warm-beige': 'hsl(42 100% 94%)', // #FFF4E6
-				'cool-gray': 'hsl(184 9% 52%)', // #7F8C8D
-				'dark-slate': 'hsl(210 29% 24%)', // #2C3E50
-			},
-			fontFamily: {
-				'heading': ['Nunito', 'Poppins', 'system-ui', 'sans-serif'],
-				'body': ['Nunito', 'Inter', 'system-ui', 'sans-serif'],
-				'accent': ['Nunito', 'Poppins', 'system-ui', 'sans-serif'],
-			},
-			backgroundImage: {
-				'turquoise-gradient': 'var(--turquoise-gradient)',
-				'cta-gradient': 'var(--cta-gradient)',
-				'hero-gradient': 'var(--hero-gradient)',
+				'coach-gradient': 'var(--coach-gradient)',
+				'warm-shadow': 'hsl(var(--warm-shadow))',
+				'office-accent': 'hsl(var(--office-accent))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
