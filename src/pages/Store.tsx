@@ -1,35 +1,42 @@
 import { useState, useMemo } from 'react';
-import { useCourses } from '@/hooks/useCourses';
+import { useProducts } from '@/hooks/useProducts';
 import { ProductCard } from '@/components/ui/product-card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search, BookOpen, Filter, Sparkles } from 'lucide-react';
+import { Search, Store as StoreIcon, Filter, Sparkles, Package } from 'lucide-react';
 
-const Courses = () => {
-  const { courses, loading, error } = useCourses();
+const Store = () => {
+  const { products, loading, error } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedProductType, setSelectedProductType] = useState<string | null>(null);
 
-  // Get unique categories
+  // Get unique categories and product types
   const categories = useMemo(() => {
-    const allCategories = courses.flatMap(course => course.categories || []);
+    const allCategories = products.flatMap(product => product.categories || []);
     return Array.from(new Set(allCategories));
-  }, [courses]);
+  }, [products]);
 
-  // Filter courses based on search and category
-  const filteredCourses = useMemo(() => {
-    return courses.filter(course => {
-      const matchesSearch = course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           course.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           course.short_description?.toLowerCase().includes(searchTerm.toLowerCase());
+  const productTypes = useMemo(() => {
+    const allTypes = products.map(product => product.product_type || 'course');
+    return Array.from(new Set(allTypes));
+  }, [products]);
+
+  // Filter products based on search, category, and product type
+  const filteredProducts = useMemo(() => {
+    return products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.short_description?.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesCategory = !selectedCategory || course.categories?.includes(selectedCategory);
+      const matchesCategory = !selectedCategory || product.categories?.includes(selectedCategory);
+      const matchesType = !selectedProductType || product.product_type === selectedProductType;
       
-      return matchesSearch && matchesCategory && course.in_stock;
+      return matchesSearch && matchesCategory && matchesType && product.in_stock;
     });
-  }, [courses, searchTerm, selectedCategory]);
+  }, [products, searchTerm, selectedCategory, selectedProductType]);
 
   if (loading) {
     return (
@@ -77,17 +84,17 @@ const Courses = () => {
                 alt="Mina's Tribe Logo" 
                 className="h-12 w-auto object-contain"
               />
-              <BookOpen className="h-8 w-8 text-primary" />
+              <StoreIcon className="h-8 w-8 text-primary" />
             </div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-4">
-              دوره‌های آموزشی مینا
+              فروشگاه مینا
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              مجموعه‌ای از دوره‌های تخصصی برای رشد شخصی و حرفه‌ای شما
+              مجموعه‌ای از دوره‌ها، کتاب‌ها، کارگاه‌ها و محصولات تخصصی برای رشد شما
             </p>
             <div className="flex items-center justify-center gap-2 mt-4 text-sm text-muted-foreground">
               <Sparkles className="h-4 w-4 text-primary" />
-              <span>{courses.length} دوره آموزشی در دسترس</span>
+              <span>{products.length} محصول در دسترس</span>
             </div>
           </div>
 
@@ -96,13 +103,39 @@ const Courses = () => {
             <div className="relative flex-1">
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="جستجو در دوره‌ها..."
+                placeholder="جستجو در محصولات..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pr-10 text-right"
                 style={{ direction: 'rtl' }}
               />
             </div>
+            
+            {/* Product Type Filter */}
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant={selectedProductType === null ? "default" : "outline"}
+                onClick={() => setSelectedProductType(null)}
+                className="gap-2"
+              >
+                <Package className="h-4 w-4" />
+                همه محصولات
+              </Button>
+              {productTypes.map((type) => (
+                <Button
+                  key={type}
+                  variant={selectedProductType === type ? "default" : "outline"}
+                  onClick={() => setSelectedProductType(type)}
+                >
+                  {type === 'course' ? 'دوره‌ها' : 
+                   type === 'ebook' ? 'کتاب‌های الکترونیکی' :
+                   type === 'workshop' ? 'کارگاه‌ها' :
+                   type === 'physical' ? 'محصولات فیزیکی' : type}
+                </Button>
+              ))}
+            </div>
+            
+            {/* Category Filter */}
             <div className="flex gap-2 flex-wrap">
               <Button
                 variant={selectedCategory === null ? "default" : "outline"}
@@ -110,7 +143,7 @@ const Courses = () => {
                 className="gap-2"
               >
                 <Filter className="h-4 w-4" />
-                همه دوره‌ها
+                همه دسته‌ها
               </Button>
               {categories.map((category) => (
                 <Button
@@ -129,45 +162,59 @@ const Courses = () => {
         <div className="max-w-7xl mx-auto mb-6">
           <div className="flex items-center justify-between">
             <p className="text-muted-foreground">
-              {filteredCourses.length} دوره یافت شد
+              {filteredProducts.length} محصول یافت شد
               {selectedCategory && (
                 <>
                   {' '}در دسته‌بندی{' '}
                   <Badge variant="secondary">{selectedCategory}</Badge>
                 </>
               )}
+              {selectedProductType && (
+                <>
+                  {' '}از نوع{' '}
+                  <Badge variant="secondary">
+                    {selectedProductType === 'course' ? 'دوره‌ها' : 
+                     selectedProductType === 'ebook' ? 'کتاب‌های الکترونیکی' :
+                     selectedProductType === 'workshop' ? 'کارگاه‌ها' :
+                     selectedProductType === 'physical' ? 'محصولات فیزیکی' : selectedProductType}
+                  </Badge>
+                </>
+              )}
             </p>
-            {selectedCategory && (
+            {(selectedCategory || selectedProductType) && (
               <Button
                 variant="ghost"
-                onClick={() => setSelectedCategory(null)}
+                onClick={() => {
+                  setSelectedCategory(null);
+                  setSelectedProductType(null);
+                }}
                 className="text-sm"
               >
-                حذف فیلتر
+                حذف فیلترها
               </Button>
             )}
           </div>
         </div>
 
-        {/* Courses Grid */}
+        {/* Products Grid */}
         <main className="max-w-7xl mx-auto">
-          {filteredCourses.length === 0 ? (
+          {filteredProducts.length === 0 ? (
             <Card className="max-w-md mx-auto">
               <CardContent className="text-center py-8">
-                <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">هیچ دوره‌ای یافت نشد</h3>
+                <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">هیچ محصولی یافت نشد</h3>
                 <p className="text-muted-foreground">
-                  {searchTerm || selectedCategory 
-                    ? 'لطفاً عبارت جستجو یا فیلتر را تغییر دهید'
-                    : 'دوره‌ای در حال حاضر موجود نیست'
+                  {searchTerm || selectedCategory || selectedProductType
+                    ? 'لطفاً عبارت جستجو یا فیلترها را تغییر دهید'
+                    : 'محصولی در حال حاضر موجود نیست'
                   }
                 </p>
               </CardContent>
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredCourses.map((course) => (
-                <ProductCard key={course.id} product={course} />
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           )}
@@ -177,4 +224,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default Store;

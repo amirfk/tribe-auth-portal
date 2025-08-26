@@ -17,6 +17,7 @@ interface Product {
   categories?: string[];
   status: string;
   in_stock: boolean;
+  product_type?: string;
 }
 
 interface ProductCardProps {
@@ -141,7 +142,10 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
             <Button className="w-full" asChild>
               <a href={product.product_url} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4 mr-2" />
-                View Course
+                {product.product_type === 'ebook' ? 'دانلود کتاب' :
+                 product.product_type === 'workshop' ? 'ثبت نام کارگاه' :
+                 product.product_type === 'physical' ? 'خرید محصول' :
+                 product.price === 0 ? 'دریافت رایگان' : 'مشاهده محصول'}
               </a>
             </Button>
           )}

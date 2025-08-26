@@ -68,16 +68,16 @@ export const AuthenticatedLayout = ({ children }: AuthenticatedLayoutProps) => {
                 </Button>
               </Link>
 
-              <Link to="/courses">
+              <Link to="/store">
                 <Button 
-                  variant={isActive('/courses') ? 'default' : 'ghost'}
-                  className={`gap-2 ${isActive('/courses') 
+                  variant={isActive('/store') || isActive('/courses') ? 'default' : 'ghost'}
+                  className={`gap-2 ${isActive('/store') || isActive('/courses')
                     ? 'bg-gradient-to-r from-primary to-accent text-white' 
                     : 'text-primary hover:bg-primary/10'
                   }`}
                 >
                   <BookOpen size={16} />
-                  دوره‌ها
+                  فروشگاه
                 </Button>
               </Link>
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-export interface Course {
+export interface Product {
   id: string;
   woocommerce_id: number;
   name: string;
@@ -15,14 +15,15 @@ export interface Course {
   categories?: string[];
   status: string;
   in_stock: boolean;
+  product_type?: string;
 }
 
-export const useCourses = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
+export const useProducts = () => {
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCourses = async () => {
+  const fetchProducts = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -32,36 +33,43 @@ export const useCourses = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setCourses(data || []);
+      setProducts(data || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'خطا در بارگذاری دوره‌ها');
+      setError(err instanceof Error ? err.message : 'خطا در بارگذاری محصولات');
     } finally {
       setLoading(false);
     }
   };
 
-  const getFeaturedCourses = (limit: number = 3) => {
-    return courses
-      .filter(course => course.in_stock)
+  const getFeaturedProducts = (limit: number = 3) => {
+    return products
+      .filter(product => product.in_stock)
       .slice(0, limit);
   };
 
-  const getCoursesByCategory = (category: string) => {
-    return courses.filter(course => 
-      course.categories?.includes(category) && course.in_stock
+  const getProductsByCategory = (category: string) => {
+    return products.filter(product => 
+      product.categories?.includes(category) && product.in_stock
+    );
+  };
+
+  const getProductsByType = (productType: string) => {
+    return products.filter(product => 
+      product.product_type === productType && product.in_stock
     );
   };
 
   useEffect(() => {
-    fetchCourses();
+    fetchProducts();
   }, []);
 
   return {
-    courses,
+    products,
     loading,
     error,
-    fetchCourses,
-    getFeaturedCourses,
-    getCoursesByCategory,
+    fetchProducts,
+    getFeaturedProducts,
+    getProductsByCategory,
+    getProductsByType,
   };
 };

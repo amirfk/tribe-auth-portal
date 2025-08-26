@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Link } from 'react-router-dom';
 import { MessageCircle, Settings, LogOut, Sparkles, BookOpen } from 'lucide-react';
-import { CourseRecommendations } from '@/components/ui/course-recommendations';
+import { ProductRecommendations } from '@/components/ui/product-recommendations';
 
 interface Profile {
   id: string;
@@ -117,7 +117,7 @@ export const UserProfile = () => {
                   مشاور هوشمند
                 </Button>
               </Link>
-              <Link to="/courses">
+              <Link to="/store">
                 <Button variant="outline" size="icon" className="border-primary/20 hover:bg-primary/5">
                   <BookOpen className="h-4 w-4" />
                 </Button>
@@ -225,11 +225,11 @@ export const UserProfile = () => {
               </CardContent>
             </Card>
 
-            {/* Course Recommendations */}
+            {/* Product Recommendations */}
             <div className="mt-6">
-              <CourseRecommendations 
+              <ProductRecommendations 
                 limit={4} 
-                title="دوره‌های پیشنهادی برای شما" 
+                title="محصولات پیشنهادی برای شما" 
                 showHeader={true}
               />
             </div>

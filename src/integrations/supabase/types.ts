@@ -142,6 +142,7 @@ export type Database = {
           last_synced_at: string | null
           name: string
           price: number | null
+          product_type: string | null
           product_url: string | null
           regular_price: number | null
           sale_price: number | null
@@ -160,6 +161,7 @@ export type Database = {
           last_synced_at?: string | null
           name: string
           price?: number | null
+          product_type?: string | null
           product_url?: string | null
           regular_price?: number | null
           sale_price?: number | null
@@ -178,6 +180,7 @@ export type Database = {
           last_synced_at?: string | null
           name?: string
           price?: number | null
+          product_type?: string | null
           product_url?: string | null
           regular_price?: number | null
           sale_price?: number | null
