@@ -4,47 +4,55 @@
 
 @layer base {
   :root {
-    /* Warm, professional office background */
-    --background: 44 38% 97%;
-    --foreground: 180 15% 15%;
+    /* Vibrant, energetic backgrounds */
+    --background: 180 25% 98%;
+    --foreground: 222 15% 12%;
 
-    /* Soft card backgrounds for depth */
+    /* Bright card backgrounds */
     --card: 0 0% 100%;
-    --card-foreground: 180 15% 15%;
+    --card-foreground: 222 15% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 180 15% 15%;
+    --popover-foreground: 222 15% 12%;
 
-    /* Primary: Deep teal from logo */
-    --primary: 180 55% 35%;
-    --primary-foreground: 0 0% 98%;
+    /* Primary: Vibrant emerald and teal */
+    --primary: 152 76% 36%; /* #2BB673 */
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Light blue-grey from logo gradient */
-    --secondary: 200 25% 88%;
-    --secondary-foreground: 180 55% 25%;
+    /* Secondary: Bright turquoise */
+    --secondary: 174 100% 39%; /* #00C9A7 */
+    --secondary-foreground: 0 0% 100%;
 
-    /* Muted warm greys for professional feel */
-    --muted: 44 20% 94%;
-    --muted-foreground: 180 10% 45%;
+    /* Muted with more energy */
+    --muted: 180 20% 95%;
+    --muted-foreground: 215 15% 45%;
 
-    /* Accent: Soft teal accent */
-    --accent: 185 40% 75%;
-    --accent-foreground: 180 55% 25%;
+    /* Accent: Vibrant gradient colors */
+    --accent: 95 100% 79%; /* #92FE9D */
+    --accent-foreground: 152 76% 25%;
+
+    /* Peach accent */
+    --peach: 35 100% 85%; /* #FFD6A5 */
+    --warm-beige: 45 100% 95%; /* #FFF4E6 */
+
+    /* Teal variant */
+    --teal: 188 100% 30%; /* #008C95 */
+    --turquoise: 174 100% 39%; /* #00C9A7 */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Professional borders */
-    --border: 200 15% 85%;
-    --input: 200 15% 90%;
-    --ring: 180 55% 35%;
+    /* Vibrant borders */
+    --border: 200 20% 88%;
+    --input: 200 15% 92%;
+    --ring: 152 76% 36%;
 
-    /* Coach office atmosphere */
-    --coach-gradient: linear-gradient(135deg, hsl(185 60% 45%), hsl(200 45% 60%));
-    --warm-shadow: 44 20% 85%;
-    --office-accent: 185 50% 85%;
+    /* Energetic gradients */
+    --hero-gradient: linear-gradient(135deg, hsl(174 100% 39%), hsl(95 100% 79%));
+    --button-gradient: linear-gradient(135deg, hsl(152 76% 36%), hsl(188 100% 30%));
+    --card-glow: 0 20px 40px hsl(152 76% 36% / 0.1);
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -64,39 +72,45 @@
   }
 
   .dark {
-    /* Dark professional office */
-    --background: 180 20% 8%;
-    --foreground: 200 15% 90%;
+    /* Dark energetic theme */
+    --background: 222 20% 6%;
+    --foreground: 180 15% 92%;
 
-    --card: 180 15% 12%;
-    --card-foreground: 200 15% 90%;
+    --card: 222 15% 10%;
+    --card-foreground: 180 15% 92%;
 
-    --popover: 180 15% 12%;
-    --popover-foreground: 200 15% 90%;
+    --popover: 222 15% 10%;
+    --popover-foreground: 180 15% 92%;
 
-    --primary: 185 60% 50%;
-    --primary-foreground: 180 20% 8%;
+    --primary: 152 76% 45%; /* Brighter in dark */
+    --primary-foreground: 222 20% 6%;
 
-    --secondary: 180 15% 18%;
-    --secondary-foreground: 200 15% 85%;
+    --secondary: 174 100% 45%;
+    --secondary-foreground: 222 20% 6%;
 
-    --muted: 180 15% 15%;
-    --muted-foreground: 200 10% 65%;
+    --muted: 222 15% 12%;
+    --muted-foreground: 180 10% 70%;
 
-    --accent: 185 40% 35%;
-    --accent-foreground: 200 15% 90%;
+    --accent: 95 100% 75%;
+    --accent-foreground: 222 20% 6%;
 
-    --destructive: 0 62.8% 30.6%;
+    --peach: 35 80% 70%;
+    --warm-beige: 45 50% 20%;
+
+    --teal: 188 100% 40%;
+    --turquoise: 174 100% 45%;
+
+    --destructive: 0 62.8% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 180 15% 20%;
-    --input: 180 15% 18%;
-    --ring: 185 60% 50%;
+    --border: 222 15% 18%;
+    --input: 222 15% 15%;
+    --ring: 152 76% 45%;
 
-    /* Dark coach office atmosphere */
-    --coach-gradient: linear-gradient(135deg, hsl(185 50% 25%), hsl(200 35% 35%));
-    --warm-shadow: 180 15% 5%;
-    --office-accent: 185 40% 25%;
+    /* Dark energetic gradients */
+    --hero-gradient: linear-gradient(135deg, hsl(174 80% 25%), hsl(95 60% 40%));
+    --button-gradient: linear-gradient(135deg, hsl(152 76% 35%), hsl(188 100% 35%));
+    --card-glow: 0 20px 40px hsl(152 76% 36% / 0.2);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -114,6 +128,82 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-persian;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  /* Smooth animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-glow);
+  }
+
+  /* Button glow effect */
+  .btn-glow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-glow:hover::before {
+    left: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.2);
+  }
+  to {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.4);
   }
 }

@@ -18,6 +18,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				persian: ['Vazirmatn', 'Inter', 'system-ui', 'sans-serif'],
+				sans: ['Inter', 'Vazirmatn', 'system-ui', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -62,9 +66,19 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				'coach-gradient': 'var(--coach-gradient)',
-				'warm-shadow': 'hsl(var(--warm-shadow))',
-				'office-accent': 'hsl(var(--office-accent))'
+				// Vibrant color extensions
+				peach: 'hsl(var(--peach))',
+				'warm-beige': 'hsl(var(--warm-beige))',
+				teal: 'hsl(var(--teal))',
+				turquoise: 'hsl(var(--turquoise))'
+			},
+			backgroundImage: {
+				'hero-gradient': 'var(--hero-gradient)',
+				'button-gradient': 'var(--button-gradient)',
+			},
+			boxShadow: {
+				'glow': 'var(--card-glow)',
+				'glow-lg': '0 25px 50px hsl(var(--primary) / 0.15)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

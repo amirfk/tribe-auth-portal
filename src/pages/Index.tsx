@@ -8,35 +8,36 @@ const Index = () => {
   const { user } = useAuth();
   
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Professional background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/30 to-office-accent/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,theme(colors.primary/5),transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,theme(colors.accent/10),transparent_60%)]"></div>
+    <div className="min-h-screen relative overflow-hidden" dir="rtl">
+      {/* Vibrant hero background */}
+      <div className="absolute inset-0 bg-hero-gradient"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,theme(colors.accent/20),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,theme(colors.peach/15),transparent_60%)]"></div>
       
       <div className="relative z-10 min-h-screen">
         {/* Header */}
-        <header className="border-b border-primary/10 bg-card/95 backdrop-blur-sm">
+        <header className="border-b border-white/20 bg-white/10 backdrop-blur-md">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <img 
                   src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
-                  alt="Mina's Tribe Logo" 
-                  className="h-10 w-auto object-contain"
+                  alt="لوگو خانواده مینا" 
+                  className="h-12 w-auto object-contain animate-glow"
                 />
-                <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Mina's Tribe
+                <h2 className="text-2xl font-bold text-white drop-shadow-lg">
+                  خانواده مینا
                 </h2>
               </div>
               <div className="flex items-center gap-3">
                 <Link to="/login">
-                  <Button variant="ghost" className="text-primary hover:bg-primary/10">
+                  <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30 btn-glow">
                     ورود
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+                  <Button className="bg-button-gradient hover:shadow-glow-lg text-white font-semibold btn-glow">
+                    <UserPlus className="ml-2 h-4 w-4" />
                     عضویت
                   </Button>
                 </Link>
@@ -46,31 +47,40 @@ const Index = () => {
         </header>
 
         {/* Hero Section */}
-        <div className="container mx-auto px-4 py-16">
-          <div className="text-center max-w-4xl mx-auto mb-16">
-            <div className="flex justify-center mb-6">
-              <img 
-                src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
-                alt="Mina's Tribe Logo" 
-                className="h-24 w-auto object-contain"
-              />
+        <div className="container mx-auto px-4 py-20">
+          <div className="text-center max-w-4xl mx-auto mb-20 animate-fade-in">
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
+                  alt="لوگو خانواده مینا" 
+                  className="h-32 w-auto object-contain animate-glow"
+                />
+                <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
+              </div>
             </div>
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-6">
+            <h1 className="text-6xl font-black text-white mb-6 drop-shadow-2xl">
               به خانواده مینا خوش آمدید
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-2xl text-white/90 mb-10 leading-relaxed drop-shadow-lg font-medium">
               جایی که رشد شخصی، کوچینگ حرفه‌ای و حمایت روانی در کنار هم قرار دارند
             </p>
-            <div className="flex justify-center gap-4 flex-wrap">
+            <div className="flex justify-center gap-6 flex-wrap animate-slide-up">
               <Link to={user ? "/ai-coach" : "/register"}>
-                <Button variant="outline" className="border-primary/30 text-primary hover:bg-primary/10 text-lg px-8 py-3">
-                  <MessageCircle className="mr-2 h-5 w-5" />
+                <Button 
+                  size="lg" 
+                  className="bg-white/20 backdrop-blur-md border-2 border-white/40 text-white hover:bg-white/30 hover:shadow-glow text-xl px-10 py-4 font-bold btn-glow"
+                >
+                  <MessageCircle className="ml-3 h-6 w-6" />
                   مشاور هوشمند
                 </Button>
               </Link>
               <Link to="/courses">
-                <Button variant="secondary" className="bg-gradient-to-r from-secondary to-secondary/80 hover:from-secondary/90 hover:to-secondary/70 text-lg px-8 py-3 shadow-lg">
-                  <BookOpen className="mr-2 h-5 w-5" />
+                <Button 
+                  size="lg" 
+                  className="bg-button-gradient hover:shadow-glow-lg text-white text-xl px-10 py-4 font-bold btn-glow"
+                >
+                  <BookOpen className="ml-3 h-6 w-6" />
                   مشاهده دوره‌ها
                 </Button>
               </Link>
@@ -78,33 +88,33 @@ const Index = () => {
           </div>
 
           {/* Features */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Card className="p-6 text-center bg-card/95 backdrop-blur-sm border-primary/10 hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="h-6 w-6 text-white" />
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto animate-slide-up">
+            <Card className="p-8 text-center bg-white/95 backdrop-blur-md border-0 shadow-glow card-hover">
+              <div className="w-16 h-16 bg-button-gradient rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <MessageCircle className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">کوچینگ هوشمند</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-2xl font-bold text-foreground mb-4">کوچینگ هوشمند</h3>
+              <p className="text-muted-foreground text-lg leading-relaxed">
                 مشاور هوشمند ما به شما کمک می‌کند تا بهترین نوع مشاوره را برای نیازهایتان پیدا کنید
               </p>
             </Card>
 
-            <Card className="p-6 text-center bg-card/95 backdrop-blur-sm border-primary/10 hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="h-6 w-6 text-white" />
+            <Card className="p-8 text-center bg-white/95 backdrop-blur-md border-0 shadow-glow card-hover">
+              <div className="w-16 h-16 bg-gradient-to-br from-teal to-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Heart className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">حمایت روانی</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-2xl font-bold text-foreground mb-4">حمایت روانی</h3>
+              <p className="text-muted-foreground text-lg leading-relaxed">
                 محیط امن و حرفه‌ای برای دریافت حمایت روانی و مشاوره‌های تخصصی
               </p>
             </Card>
 
-            <Card className="p-6 text-center bg-card/95 backdrop-blur-sm border-primary/10 hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-6 w-6 text-white" />
+            <Card className="p-8 text-center bg-white/95 backdrop-blur-md border-0 shadow-glow card-hover">
+              <div className="w-16 h-16 bg-gradient-to-br from-accent to-secondary rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Shield className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">محرمانگی کامل</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-2xl font-bold text-foreground mb-4">محرمانگی کامل</h3>
+              <p className="text-muted-foreground text-lg leading-relaxed">
                 تمام اطلاعات شما با بالاترین استانداردهای امنیتی محفوظ نگهداری می‌شود
               </p>
             </Card>
@@ -112,17 +122,17 @@ const Index = () => {
         </div>
 
         {/* Footer */}
-        <footer className="border-t border-primary/10 bg-card/95 backdrop-blur-sm py-8">
+        <footer className="border-t border-white/20 bg-gradient-to-r from-warm-beige/90 to-peach/90 backdrop-blur-md py-12">
           <div className="container mx-auto px-4 text-center">
-            <div className="flex justify-center items-center gap-2 mb-4">
+            <div className="flex justify-center items-center gap-3 mb-6">
               <img 
                 src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
-                alt="Mina's Tribe Logo" 
-                className="h-8 w-auto object-contain"
+                alt="لوگو خانواده مینا" 
+                className="h-10 w-auto object-contain"
               />
-              <span className="text-sm text-muted-foreground">Mina's Tribe © 2024</span>
+              <span className="text-lg font-bold text-foreground">خانواده مینا © ۱۴۰۳</span>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground font-medium">
               پلتفرم حرفه‌ای رشد شخصی و کوچینگ
             </p>
           </div>
