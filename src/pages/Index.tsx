@@ -20,11 +20,16 @@ const Index = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img 
-                  src="/lovable-uploads/87f18587-d472-4831-a300-99843cc45cfe.png" 
-                  alt="لوگو خانواده مینا" 
-                  className="h-12 w-auto object-contain"
-                />
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-xl blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative bg-white/95 backdrop-blur-sm rounded-xl p-2 border border-white/20 shadow-lg">
+                    <img 
+                      src="/lovable-uploads/87f18587-d472-4831-a300-99843cc45cfe.png" 
+                      alt="لوگو خانواده مینا" 
+                      className="h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+                    />
+                  </div>
+                </div>
                 <h2 className="text-2xl font-bold text-white drop-shadow-lg">
                   خانواده مینا
                 </h2>
@@ -50,12 +55,14 @@ const Index = () => {
         <div className="container mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto mb-20 animate-fade-in">
             <div className="flex justify-center mb-8">
-              <div className="relative">
-                <div className="bg-white/90 rounded-2xl p-8 shadow-2xl backdrop-blur-sm">
+              <div className="relative group animate-scale-in">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary via-accent to-secondary rounded-3xl blur-lg opacity-75 group-hover:opacity-100 transition-all duration-500 animate-pulse"></div>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-3xl opacity-60"></div>
+                <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl p-10 border-2 border-white/30 shadow-2xl hover-scale">
                   <img 
                     src="/lovable-uploads/87f18587-d472-4831-a300-99843cc45cfe.png" 
                     alt="لوگو خانواده مینا" 
-                    className="h-32 w-auto object-contain"
+                    className="h-36 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
               </div>
@@ -126,11 +133,16 @@ const Index = () => {
         <footer className="border-t border-white/20 bg-gradient-to-r from-warm-beige/90 to-peach/90 backdrop-blur-md py-12">
           <div className="container mx-auto px-4 text-center">
             <div className="flex justify-center items-center gap-3 mb-6">
-              <img 
-                src="/lovable-uploads/87f18587-d472-4831-a300-99843cc45cfe.png" 
-                alt="لوگو خانواده مینا" 
-                className="h-10 w-auto object-contain"
-              />
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-accent to-primary rounded-lg blur-sm opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                <div className="relative bg-white/90 backdrop-blur-sm rounded-lg p-2 border border-white/30 shadow-md hover-scale">
+                  <img 
+                    src="/lovable-uploads/87f18587-d472-4831-a300-99843cc45cfe.png" 
+                    alt="لوگو خانواده مینا" 
+                    className="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+                  />
+                </div>
+              </div>
               <span className="text-lg font-bold text-foreground">خانواده مینا © ۱۴۰۳</span>
             </div>
             <p className="text-muted-foreground font-medium">
