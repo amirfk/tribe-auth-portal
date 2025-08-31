@@ -21,9 +21,9 @@ const Index = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <img 
-                  src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
+                  src="/lovable-uploads/87f18587-d472-4831-a300-99843cc45cfe.png" 
                   alt="لوگو خانواده مینا" 
-                  className="h-12 w-auto object-contain animate-glow"
+                  className="h-12 w-auto object-contain"
                 />
                 <h2 className="text-2xl font-bold text-white drop-shadow-lg">
                   خانواده مینا
@@ -50,22 +50,12 @@ const Index = () => {
         <div className="container mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto mb-20 animate-fade-in">
             <div className="flex justify-center mb-8">
-              <div className="relative flex justify-center">
-                {/* Multi-layered glow background */}
-                <div className="absolute inset-0 flex justify-center items-center">
-                  <div className="w-44 h-44 bg-white/30 rounded-full blur-2xl animate-pulse"></div>
-                </div>
-                <div className="absolute inset-0 flex justify-center items-center">
-                  <div className="w-40 h-40 bg-white/20 rounded-full blur-xl"></div>
-                </div>
-                
-                {/* Glassmorphism container */}
-                <div className="relative backdrop-blur-md bg-white/25 rounded-full p-8 border-2 border-white/40 shadow-2xl">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/20 to-transparent"></div>
+              <div className="relative">
+                <div className="bg-white/90 rounded-2xl p-8 shadow-2xl backdrop-blur-sm">
                   <img 
-                    src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
+                    src="/lovable-uploads/87f18587-d472-4831-a300-99843cc45cfe.png" 
                     alt="لوگو خانواده مینا" 
-                    className="h-28 w-auto object-contain relative z-10 drop-shadow-[0_0_30px_rgba(255,255,255,0.9)] animate-glow"
+                    className="h-32 w-auto object-contain"
                   />
                 </div>
               </div>
@@ -137,7 +127,7 @@ const Index = () => {
           <div className="container mx-auto px-4 text-center">
             <div className="flex justify-center items-center gap-3 mb-6">
               <img 
-                src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
+                src="/lovable-uploads/87f18587-d472-4831-a300-99843cc45cfe.png" 
                 alt="لوگو خانواده مینا" 
                 className="h-10 w-auto object-contain"
               />
