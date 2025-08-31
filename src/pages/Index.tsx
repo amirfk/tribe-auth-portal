@@ -50,13 +50,24 @@ const Index = () => {
         <div className="container mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto mb-20 animate-fade-in">
             <div className="flex justify-center mb-8">
-              <div className="relative">
-                <img 
-                  src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
-                  alt="لوگو خانواده مینا" 
-                  className="h-32 w-auto object-contain animate-glow"
-                />
-                <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
+              <div className="relative flex justify-center">
+                {/* Multi-layered glow background */}
+                <div className="absolute inset-0 flex justify-center items-center">
+                  <div className="w-44 h-44 bg-white/30 rounded-full blur-2xl animate-pulse"></div>
+                </div>
+                <div className="absolute inset-0 flex justify-center items-center">
+                  <div className="w-40 h-40 bg-white/20 rounded-full blur-xl"></div>
+                </div>
+                
+                {/* Glassmorphism container */}
+                <div className="relative backdrop-blur-md bg-white/25 rounded-full p-8 border-2 border-white/40 shadow-2xl">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/20 to-transparent"></div>
+                  <img 
+                    src="/lovable-uploads/636ebeb2-12fd-4466-b7ef-38352bd27b8a.png" 
+                    alt="لوگو خانواده مینا" 
+                    className="h-28 w-auto object-contain relative z-10 drop-shadow-[0_0_30px_rgba(255,255,255,0.9)] animate-glow"
+                  />
+                </div>
               </div>
             </div>
             <h1 className="text-6xl font-black text-white mb-6 drop-shadow-2xl">
